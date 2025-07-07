@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonal Designer Boutique - Orders Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-07-06 at 18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo">
+            </div>
+            <h1 class="main-title">Orders Management System</h1>
+            <p class="subtitle">Fashion Designing Training Institute</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search customers by name..." class="search-input">
+                </div>
+                <button id="addNewBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add New Customer
+                </button>
+            </div>
+        </section>
+
+        <!-- Customer Form Modal -->
+        <div id="customerModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add New Customer</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <form id="customerForm" class="customer-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name *</label>
+                            <input type="text" id="customerName" name="customer_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number *</label>
+                            <input type="tel" id="phoneNumber" name="phone_number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="garmentType">Garment Type *</label>
+                            <select id="garmentType" name="garment_type" required>
+                                <option value="blouse">Blouse</option>
+                                <option value="pant">Pant</option>
+                                <option value="dress">Dress</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Blouse Fields -->
+                    <div id="blouseFields" class="garment-fields">
+                        <h3 class="section-title">
+                            <i class="fas fa-tshirt"></i>
+                            Blouse Measurements
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="shoulder">Shoulder *</label>
+                                <input type="text" id="shoulder" name="shoulder">
+                            </div>
+                            <div class="form-group">
+                                <label for="chest">Chest *</label>
+                                <input type="text" id="chest" name="chest">
+                            </div>
+                            <div class="form-group">
+                                <label for="bust">Bust *</label>
+                                <input type="text" id="bust" name="bust">
+                            </div>
+                            <div class="form-group">
+                                <label for="waist">Waist *</label>
+                                <input type="text" id="waist" name="waist">
+                            </div>
+                            <div class="form-group">
+                                <label for="bustPoint">Bust Point *</label>
+                                <input type="text" id="bustPoint" name="bust_point">
+                            </div>
+                            <div class="form-group">
+                                <label for="bustToBust">Bust to Bust *</label>
+                                <input type="text" id="bustToBust" name="bust_to_bust">
+                            </div>
+                            <div class="form-group">
+                                <label for="sleeves">Sleeves *</label>
+                                <input type="text" id="sleeves" name="sleeves">
+                            </div>
+                            <div class="form-group">
+                                <label for="penaltyCrease">Penalty Crease *</label>
+                                <input type="text" id="penaltyCrease" name="penalty_crease">
+                            </div>
+                            <div class="form-group">
+                                <label for="backNeck">Back Neck *</label>
+                                <input type="text" id="backNeck" name="back_neck">
+                            </div>
+                            <div class="form-group">
+                                <label for="frontNeck">Front Neck *</label>
+                                <input type="text" id="frontNeck" name="front_neck">
+                            </div>
+                            <div class="form-group">
+                                <label for="length">Length *</label>
+                                <input type="text" id="length" name="length">
+                            </div>
+                            <div class="form-group">
+                                <label for="lowerChest">Lower Chest *</label>
+                                <input type="text" id="lowerChest" name="lower_chest">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pant Fields -->
+                    <div id="pantFields" class="garment-fields" style="display: none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-user-tie"></i>
+                            Pant Measurements
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="pantWaist">Waist *</label>
+                                <input type="text" id="pantWaist" name="pant_waist">
+                            </div>
+                            <div class="form-group">
+                                <label for="heap">Heap *</label>
+                                <input type="text" id="heap" name="heap">
+                            </div>
+                            <div class="form-group">
+                                <label for="pantLength">Length *</label>
+                                <input type="text" id="pantLength" name="pant_length">
+                            </div>
+                            <div class="form-group">
+                                <label for="thigh">Thigh *</label>
+                                <input type="text" id="thigh" name="thigh">
+                            </div>
+                            <div class="form-group">
+                                <label for="knee">Knee *</label>
+                                <input type="text" id="knee" name="knee">
+                            </div>
+                            <div class="form-group">
+                                <label for="bottom">Bottom *</label>
+                                <input type="text" id="bottom" name="bottom">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dress Fields -->
+                    <div id="dressFields" class="garment-fields" style="display: none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-female"></i>
+                            Dress Measurements
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="dressShoulder">Shoulder *</label>
+                                <input type="text" id="dressShoulder" name="dress_shoulder">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressChest">Chest *</label>
+                                <input type="text" id="dressChest" name="dress_chest">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressWaist">Waist *</label>
+                                <input type="text" id="dressWaist" name="dress_waist">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressHeap">Heap *</label>
+                                <input type="text" id="dressHeap" name="dress_heap">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressLength">Length *</label>
+                                <input type="text" id="dressLength" name="dress_length">
+                            </div>
+                            <div class="form-group">
+                                <label for="armWholeRound">Arm Whole Round *</label>
+                                <input type="text" id="armWholeRound" name="arm_whole_round">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressSleeves">Sleeves *</label>
+                                <input type="text" id="dressSleeves" name="dress_sleeves">
+                            </div>
+                            <div class="form-group">
+                                <label for="penaltyCircle">Penalty Circle *</label>
+                                <input type="text" id="penaltyCircle" name="penalty_circle">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressFrontNeck">Front Neck *</label>
+                                <input type="text" id="dressFrontNeck" name="dress_front_neck">
+                            </div>
+                            <div class="form-group">
+                                <label for="dressBackNeck">Back Neck *</label>
+                                <input type="text" id="dressBackNeck" name="dress_back_neck">
+                            </div>
+                            <div class="form-group">
+                                <label for="mathaRound">Matha Round *</label>
+                                <input type="text" id="mathaRound" name="matha_round">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="deliveryDate">Delivery Date *</label>
+                            <input type="date" id="deliveryDate" name="delivery_date" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="additionalNotes">Additional Notes</label>
+                            <textarea id="additionalNotes" name="additional_notes" rows="3" placeholder="Any special instructions or notes..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Save Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Customers List -->
+        <section class="customers-section">
+            <div class="section-header">
+                <h2>Customer Orders</h2>
+                <div class="customers-count">
+                    <span id="customersCount">0</span> customers
+                </div>
+            </div>
+            <div id="customersList" class="customers-list">
+                <!-- Customers will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
