@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
@@ -6,7 +7,12 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///orders.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'sonal_designer_boutique_secret_key_2025'
 db = SQLAlchemy(app)
+
+# Fixed credentials
+VALID_USERNAME = 'sonaldesignerbootique'
+VALID_PASSWORD = 'Shilpa@3456'
 
 # Database Model
 class Customer(db.Model):
@@ -102,16 +108,46 @@ class Customer(db.Model):
         }
 
 # Routes
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username == VALID_USERNAME and password == VALID_PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', error='Invalid username or password')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
+def login_required(f):
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
 @app.route('/api/customers', methods=['GET'])
+@login_required
 def get_customers():
     customers = Customer.query.all()
     return jsonify([customer.to_dict() for customer in customers])
 
 @app.route('/api/customers', methods=['POST'])
+@login_required
 def add_customer():
     data = request.json
     
@@ -173,6 +209,7 @@ def add_customer():
         return jsonify({'error': str(e)}), 400
 
 @app.route('/api/customers/<int:customer_id>', methods=['PUT'])
+@login_required
 def update_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
     data = request.json
@@ -233,6 +270,7 @@ def update_customer(customer_id):
         return jsonify({'error': str(e)}), 400
 
 @app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
+@login_required
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
     db.session.delete(customer)
@@ -240,6 +278,7 @@ def delete_customer(customer_id):
     return jsonify({'message': 'Customer deleted successfully'})
 
 @app.route('/api/customers/search')
+@login_required
 def search_customers():
     query = request.args.get('q', '')
     if query:
@@ -256,8 +295,6 @@ def search_customers():
 #     with app.app_context():
 #         db.create_all()
 #     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
-    # Main execution
+ # Main execution
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
