@@ -185,6 +185,24 @@
               document.getElementById("cancelMeasurementBtn").addEventListener("click", function () {
                  document.getElementById("measurementModal").style.display = "none";
               });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                 const addBtn = document.getElementById("addNewBtn");
+                 const customerModal = document.getElementById("customerModal");
+             
+                 if (addBtn && customerModal) {
+                    addBtn.addEventListener("click", function () {
+                       customerModal.style.display = "block";
+
+                   });
+               }
+               const closeBtn = document.querySelector("#customerModal .close");
+               if (closeBtn) {
+                   closeBtn.addEventListener("click", function () {
+                       customerModal.style.display = "none";
+                   });
+               }
+            }); // <-- Added missing closing brace for DOMContentLoaded
        </script>
 
         <!-- Customers List -->
