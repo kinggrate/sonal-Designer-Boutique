@@ -210,6 +210,7 @@
 
     // Submit customer and measurements together
     customerForm.addEventListener('submit', function (e) {
+      console.log("Customer form submit handler running"); // Debug log
       e.preventDefault(); // Prevent default form submission
       // Collect customer info
       const customerData = {
