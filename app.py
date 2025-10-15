@@ -3,8 +3,10 @@ from flask import session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/dev/sonal/orders.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'sonal_designer_boutique_secret_key_2025'
@@ -170,7 +172,10 @@ def get_customers():
 @app.route('/api/customers', methods=['POST'])
 @login_required
 def add_customer():
-    data = request.get_json()
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
     customer = Customer(
         customer_name=data['customer_name'],
         phone_number=data['phone_number']

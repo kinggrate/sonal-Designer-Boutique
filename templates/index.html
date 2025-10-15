@@ -113,46 +113,38 @@
 
         <!-- JS Logic -->
         <script>
-  // Garment type toggle logic
-  document.getElementById("measurementGarmentType").addEventListener("change", function () {
-    const type = this.value;
-    document.getElementById("measurementBlouseFields").style.display = "none";
-    document.getElementById("measurementPantFields").style.display = "none";
-    document.getElementById("measurementDressFields").style.display = "none";
-    if (type === "blouse") {
-      document.getElementById("measurementBlouseFields").style.display = "block";
-    } else if (type === "pant") {
-      document.getElementById("measurementPantFields").style.display = "block";
-    } else if (type === "dress") {
-      document.getElementById("measurementDressFields").style.display = "block";
-    }
-  });
-
-  // Open modal and inject customer_id
-  function openMeasurementModal(customerId) {
-    document.getElementById("measurementCustomerId").value = customerId;
-    document.getElementById("measurementModal").style.display = "block";
-  }
-
-  // Customer Modal logic
   document.addEventListener("DOMContentLoaded", function () {
+    // Modal logic
     const addBtn = document.getElementById("addNewBtn");
     const customerModal = document.getElementById("customerModal");
+    const customerCloseBtn = document.querySelector("#customerModal .close");
+    const addMeasurementBtn = document.getElementById('addMeasurementBtn');
+    const measurementModal = document.getElementById('measurementModal');
+    const measurementCloseBtn = document.querySelector("#measurementModal .close");
+    const cancelMeasurementBtn = document.getElementById("cancelMeasurementBtn");
+    const customerForm = document.getElementById('customerForm');
+    const measurementForm = document.getElementById('measurementForm');
+    const dynamicFields = document.getElementById('dynamicMeasurementFields');
+
+    // Open customer modal
     if (addBtn && customerModal) {
       addBtn.addEventListener("click", function () {
         customerModal.style.display = "block";
       });
     }
-    const customerCloseBtn = document.querySelector("#customerModal .close");
+    // Close customer modal
     if (customerCloseBtn) {
       customerCloseBtn.addEventListener("click", function () {
         customerModal.style.display = "none";
       });
     }
-    // Measurement Modal logic
-    const measurementModal = document.getElementById("measurementModal");
-    const measurementCloseBtn = document.querySelector("#measurementModal .close");
-    const cancelMeasurementBtn = document.getElementById("cancelMeasurementBtn");
+    // Open measurement modal
+    if (addMeasurementBtn && measurementModal) {
+      addMeasurementBtn.addEventListener('click', function () {
+        measurementModal.style.display = 'block';
+      });
+    }
+    // Close measurement modal
     if (measurementCloseBtn) {
       measurementCloseBtn.addEventListener("click", function () {
         measurementModal.style.display = "none";
@@ -163,70 +155,107 @@
         measurementModal.style.display = "none";
       });
     }
-  });
 
-  // Dynamic measurement fields logic
-  const garmentFields = {
-    blouse: `<div class='garment-fields'><h3>Blouse Measurements</h3><div class='form-grid'>
-      <input type='text' name='shoulder' placeholder='Shoulder'>
-      <input type='text' name='chest' placeholder='Chest'>
-      <input type='text' name='bust' placeholder='Bust'>
-      <input type='text' name='waist' placeholder='Waist'>
-      <input type='text' name='bust_point' placeholder='Bust Point'>
-      <input type='text' name='bust_to_bust' placeholder='Bust to Bust'>
-      <input type='text' name='sleeves' placeholder='Sleeves'>
-      <input type='text' name='penalty_crease' placeholder='Penalty Crease'>
-      <input type='text' name='back_neck' placeholder='Back Neck'>
-      <input type='text' name='front_neck' placeholder='Front Neck'>
-      <input type='text' name='length' placeholder='Length'>
-      <input type='text' name='lower_chest' placeholder='Lower Chest'>
-      <input type='text' name='neck_round' placeholder='Neck Round'>
-    </div></div>`,
-    pant: `<div class='garment-fields'><h3>Pant Measurements</h3><div class='form-grid'>
-      <input type='text' name='pant_waist' placeholder='Waist'>
-      <input type='text' name='hip' placeholder='Hip'>
-      <input type='text' name='pant_length' placeholder='Length'>
-      <input type='text' name='thigh' placeholder='Thigh'>
-      <input type='text' name='knee' placeholder='Knee'>
-      <input type='text' name='bottom' placeholder='Bottom'>
-    </div></div>`,
-    dress: `<div class='garment-fields'><h3>Dress Measurements</h3><div class='form-grid'>
-      <input type='text' name='dress_shoulder' placeholder='Shoulder'>
-      <input type='text' name='dress_chest' placeholder='Chest'>
-      <input type='text' name='dress_waist' placeholder='Waist'>
-      <input type='text' name='dress_hip' placeholder='Hip'>
-      <input type='text' name='dress_length' placeholder='Length'>
-      <input type='text' name='arm_whole_round' placeholder='Arm Whole Round'>
-      <input type='text' name='dress_sleeves' placeholder='Sleeves'>
-      <input type='text' name='penalty_circle' placeholder='Penalty Circle'>
-      <input type='text' name='dress_front_neck' placeholder='Front Neck'>
-      <input type='text' name='dress_back_neck' placeholder='Back Neck'>
-      <input type='text' name='matha_round' placeholder='Matha Round'>
-    </div></div>`
-  };
+    // Dynamic measurement fields logic
+    const garmentFields = {
+      blouse: `<div class='garment-fields'><h3>Blouse Measurements</h3><div class='form-grid'>
+        <input type='text' name='shoulder' placeholder='Shoulder'>
+        <input type='text' name='chest' placeholder='Chest'>
+        <input type='text' name='bust' placeholder='Bust'>
+        <input type='text' name='waist' placeholder='Waist'>
+        <input type='text' name='bust_point' placeholder='Bust Point'>
+        <input type='text' name='bust_to_bust' placeholder='Bust to Bust'>
+        <input type='text' name='sleeves' placeholder='Sleeves'>
+        <input type='text' name='penalty_crease' placeholder='Penalty Crease'>
+        <input type='text' name='back_neck' placeholder='Back Neck'>
+        <input type='text' name='front_neck' placeholder='Front Neck'>
+        <input type='text' name='length' placeholder='Length'>
+        <input type='text' name='lower_chest' placeholder='Lower Chest'>
+        <input type='text' name='neck_round' placeholder='Neck Round'>
+      </div></div>`,
+      pant: `<div class='garment-fields'><h3>Pant Measurements</h3><div class='form-grid'>
+        <input type='text' name='pant_waist' placeholder='Waist'>
+        <input type='text' name='hip' placeholder='Hip'>
+        <input type='text' name='pant_length' placeholder='Length'>
+        <input type='text' name='thigh' placeholder='Thigh'>
+        <input type='text' name='knee' placeholder='Knee'>
+        <input type='text' name='bottom' placeholder='Bottom'>
+      </div></div>`,
+      dress: `<div class='garment-fields'><h3>Dress Measurements</h3><div class='form-grid'>
+        <input type='text' name='dress_shoulder' placeholder='Shoulder'>
+        <input type='text' name='dress_chest' placeholder='Chest'>
+        <input type='text' name='dress_waist' placeholder='Waist'>
+        <input type='text' name='dress_hip' placeholder='Hip'>
+        <input type='text' name='dress_length' placeholder='Length'>
+        <input type='text' name='arm_whole_round' placeholder='Arm Whole Round'>
+        <input type='text' name='dress_sleeves' placeholder='Sleeves'>
+        <input type='text' name='penalty_circle' placeholder='Penalty Circle'>
+        <input type='text' name='dress_front_neck' placeholder='Front Neck'>
+        <input type='text' name='dress_back_neck' placeholder='Back Neck'>
+        <input type='text' name='matha_round' placeholder='Matha Round'>
+      </div></div>`
+    };
 
-  const addMeasurementBtn = document.getElementById('addMeasurementBtn');
-  const customerForm = document.getElementById('customerForm');
-  const measurementModal = document.getElementById('measurementModal');
-  const measurementForm = document.getElementById('measurementForm');
-  const dynamicFields = document.getElementById('dynamicMeasurementFields');
-
-  if (addMeasurementBtn) {
-    addMeasurementBtn.addEventListener('click', function () {
-      // Show measurement modal
-      measurementModal.style.display = 'block';
-      // Optionally pass customer info if needed
+    const garmentTypeCheckboxes = document.querySelectorAll('input[name="garment_types"]');
+    garmentTypeCheckboxes.forEach(function (checkbox) {
+      checkbox.addEventListener('change', function () {
+        dynamicFields.innerHTML = '';
+        garmentTypeCheckboxes.forEach(function (cb) {
+          if (cb.checked) {
+            dynamicFields.innerHTML += garmentFields[cb.value];
+          }
+        });
+      });
     });
-  }
 
-  const garmentTypeCheckboxes = document.querySelectorAll('input[name="garment_types"]');
-  garmentTypeCheckboxes.forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-      dynamicFields.innerHTML = '';
-      garmentTypeCheckboxes.forEach(function (cb) {
-        if (cb.checked) {
-          dynamicFields.innerHTML += garmentFields[cb.value];
+    // Submit customer and measurements together
+    customerForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // Collect customer info
+      const customerData = {
+        customer_name: document.getElementById('customerName').value,
+        phone_number: document.getElementById('phoneNumber').value,
+        delivery_date: document.getElementById('deliveryDate').value,
+        additional_notes: document.getElementById('additionalNotes').value,
+        measurements: []
+      };
+      // Collect measurements from dynamic fields
+      const selectedTypes = Array.from(document.querySelectorAll('input[name="garment_types"]:checked')).map(cb => cb.value);
+      selectedTypes.forEach(type => {
+        const fields = {};
+        fields.garment_type = type;
+        fields.delivery_date = customerData.delivery_date;
+        fields.additional_notes = customerData.additional_notes;
+        // Get all inputs for this garment type
+        const inputs = dynamicFields.querySelectorAll(`.garment-fields input[name]`);
+        inputs.forEach(input => {
+          if (input.closest('.garment-fields').querySelector('h3').textContent.toLowerCase().includes(type)) {
+            fields[input.name] = input.value;
+          }
+        });
+        customerData.measurements.push(fields);
+      });
+      // Send to backend
+      fetch('/api/customers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(customerData)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.customer_id) {
+          alert('Customer and measurements saved!');
+          customerModal.style.display = 'none';
+          measurementModal.style.display = 'none';
+          customerForm.reset();
+          measurementForm.reset();
+          dynamicFields.innerHTML = '';
+        } else {
+          alert('Error: ' + (data.message || 'Unknown error'));
         }
+      })
+      .catch(err => {
+        alert('Error: ' + err);
       });
     });
   });
