@@ -203,6 +203,26 @@
                    });
                }
             }); // <-- Added missing closing brace for DOMContentLoaded
+
+            // Add measurement form modal logic
+            document.addEventListener("DOMContentLoaded", function () {
+              const addBtn = document.getElementById("addNewBtn");
+              const formModal = document.getElementById("measurementForm");
+
+              if (addBtn && formModal) {
+                addBtn.addEventListener("click", function () {
+                  formModal.style.display = "block";
+                });
+              }
+
+              // Optional: close logic
+              const closeBtn = document.querySelector("#measurementForm .close");
+              if (closeBtn) {
+                closeBtn.addEventListener("click", function () {
+                  formModal.style.display = "none";
+                });
+              }
+            });
        </script>
 
         <!-- Customers List -->
