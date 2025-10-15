@@ -21,209 +21,216 @@
 
         <!-- Search Section -->
         <section class="search-section">
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="Search customers by name or phone..." class="search-input">
-                </div>
-                <button id="addNewBtn" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Add New Customer
-                </button>
+          <div class="search-container">
+            
+            <!-- Search Box -->
+            <div class="search-box">
+              <label for="searchInput" class="visually-hidden">Search Customers</label>
+              <i class="fas fa-search search-icon" aria-hidden="true"></i>
+              <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Search customers by name or phone..." 
+            autocomplete="off">
             </div>
-        </section>
+
+            <!-- Add Customer Button -->
+            <div class="search-actions">
+              <button id="addNewBtn" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            <span>Add New Customer</span>
+              </button>
+            </div>
+
+          </div>
+        </section></button></div>
 
         <!-- Customer Form Modal -->
         <div id="customerModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="modalTitle">Add New Customer</h2>
-                    <span class="close">&times;</span>
-                </div>
-                <form id="customerForm" class="customer-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="customerName">Customer Name *</label>
-                            <input type="text" id="customerName" name="customer_name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phoneNumber">Phone Number *</label>
-                            <input type="tel" id="phoneNumber" name="phone_number" required>
-                        </div>
-                    </div>
-
-                    
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="deliveryDate">Delivery Date *</label>
-                            <input type="date" id="deliveryDate" name="delivery_date" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="additionalNotes">Additional Notes</label>
-                            <textarea id="additionalNotes" name="additional_notes" rows="3" placeholder="Any special instructions or notes..."></textarea>
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">Save Customer</button>
-                    </div>
-                </form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 id="modalTitle">Add New Customer</h2>
+              <span class="close">&times;</span>
             </div>
+            <form id="customerForm" class="customer-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="customerName">Customer Name *</label>
+                  <input type="text" id="customerName" name="customer_name" required>
+                </div>
+                <div class="form-group">
+                  <label for="phoneNumber">Phone Number *</label>
+                  <input type="tel" id="phoneNumber" name="phone_number" required>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label for="deliveryDate">Delivery Date *</label>
+                  <input type="date" id="deliveryDate" name="delivery_date" required>
+                </div>
+                <div class="form-group full-width">
+                  <label for="additionalNotes">Additional Notes</label>
+                  <textarea id="additionalNotes" name="additional_notes" rows="3" placeholder="Any special instructions or notes..."></textarea>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="addMeasurementBtn">Add Measurement for this Customer</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">Save Customer</button>
+              </div>
+            </form>
+          </div>
         </div>
 
-        <!-- Measurement Modal -->
+        <!-- Measurement Modal (Dynamic) -->
         <div id="measurementModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Add Garment Measurements</h2>
-                    <span class="close">&times;</span>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Add Garment Measurements</h2>
+              <span class="close">&times;</span>
+            </div>
+            <form id="measurementForm" action="#" method="POST">
+              <input type="hidden" id="measurementCustomerId" name="customer_id">
+              <div class="form-group">
+                <label>Select Garment Types *</label>
+                <div class="garment-type-checkboxes">
+                  <label><input type="checkbox" name="garment_types" value="blouse"> Blouse</label>
+                  <label><input type="checkbox" name="garment_types" value="pant"> Pant</label>
+                  <label><input type="checkbox" name="garment_types" value="dress"> Dress</label>
                 </div>
+              </div>
+              <div id="dynamicMeasurementFields">
+                <!-- Dynamic measurement fields will be injected here -->
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Measurements</button>
+              </div>
+            </form>
+          </div>
+        </div>
 
-                <form id="measurementForm" action="/api/measurements" method="POST">
-                    <!-- Hidden Customer ID -->
-                    <input type="hidden" id="measurementCustomerId" name="customer_id">
+        <!-- JS Logic -->
+        <script>
+  // Garment type toggle logic
+  document.getElementById("measurementGarmentType").addEventListener("change", function () {
+    const type = this.value;
+    document.getElementById("measurementBlouseFields").style.display = "none";
+    document.getElementById("measurementPantFields").style.display = "none";
+    document.getElementById("measurementDressFields").style.display = "none";
+    if (type === "blouse") {
+      document.getElementById("measurementBlouseFields").style.display = "block";
+    } else if (type === "pant") {
+      document.getElementById("measurementPantFields").style.display = "block";
+    } else if (type === "dress") {
+      document.getElementById("measurementDressFields").style.display = "block";
+    }
+  });
 
-                    <!-- Garment Type Selector -->
-                    <div class="form-group">
-                        <label for="measurementGarmentType">Garment Type *</label>
-                      <select id="measurementGarmentType" name="garment_type" required>
-                        <option value="">Select Garment</option>
-                        <option value="blouse">Blouse</option>
-                        <option value="pant">Pant</option>
-                        <option value="dress">Dress</option>
-                      </select>
-                    </div>
+  // Open modal and inject customer_id
+  function openMeasurementModal(customerId) {
+    document.getElementById("measurementCustomerId").value = customerId;
+    document.getElementById("measurementModal").style.display = "block";
+  }
 
-                    <!-- Blouse Fields -->
-                    <div id="measurementBlouseFields" class="garment-fields" style="display: none;">
-                      <h3 class="section-title"><i class="fas fa-tshirt"></i> Blouse Measurements</h3>
-                      <div class="form-grid">
-                         <input type="text" name="shoulder" placeholder="Shoulder">
-                         <input type="text" name="chest" placeholder="Chest">
-                         <input type="text" name="bust" placeholder="Bust">
-                         <input type="text" name="waist" placeholder="Waist">
-                         <input type="text" name="bust_point" placeholder="Bust Point">
-                         <input type="text" name="bust_to_bust" placeholder="Bust to Bust">
-                         <input type="text" name="sleeves" placeholder="Sleeves">
-                         <input type="text" name="penalty_crease" placeholder="Penalty Crease">
-                         <input type="text" name="back_neck" placeholder="Back Neck">
-                         <input type="text" name="front_neck" placeholder="Front Neck">
-                         <input type="text" name="length" placeholder="Length">
-                         <input type="text" name="lower_chest" placeholder="Lower Chest">
-                         <input type="text" name="neck_round" placeholder="Neck Round"> <!-- ✅ Added -->
-                      </div>
-                    </div>
+  // Customer Modal logic
+  document.addEventListener("DOMContentLoaded", function () {
+    const addBtn = document.getElementById("addNewBtn");
+    const customerModal = document.getElementById("customerModal");
+    if (addBtn && customerModal) {
+      addBtn.addEventListener("click", function () {
+        customerModal.style.display = "block";
+      });
+    }
+    const customerCloseBtn = document.querySelector("#customerModal .close");
+    if (customerCloseBtn) {
+      customerCloseBtn.addEventListener("click", function () {
+        customerModal.style.display = "none";
+      });
+    }
+    // Measurement Modal logic
+    const measurementModal = document.getElementById("measurementModal");
+    const measurementCloseBtn = document.querySelector("#measurementModal .close");
+    const cancelMeasurementBtn = document.getElementById("cancelMeasurementBtn");
+    if (measurementCloseBtn) {
+      measurementCloseBtn.addEventListener("click", function () {
+        measurementModal.style.display = "none";
+      });
+    }
+    if (cancelMeasurementBtn) {
+      cancelMeasurementBtn.addEventListener("click", function () {
+        measurementModal.style.display = "none";
+      });
+    }
+  });
 
-                    <!-- Pant Fields -->
-                    <div id="measurementPantFields" class="garment-fields" style="display: none;">
-                      <h3 class="section-title"><i class="fas fa-user-tie"></i> Pant Measurements</h3>
-                      <div class="form-grid">
-                         <input type="text" name="pant_waist" placeholder="Waist">
-                         <input type="text" name="hip" placeholder="Hip"> <!-- ✅ Fixed spelling -->
-                         <input type="text" name="pant_length" placeholder="Length">
-                         <input type="text" name="thigh" placeholder="Thigh">
-                         <input type="text" name="knee" placeholder="Knee">
-                         <input type="text" name="bottom" placeholder="Bottom">
-                      </div>
-                    </div>
+  // Dynamic measurement fields logic
+  const garmentFields = {
+    blouse: `<div class='garment-fields'><h3>Blouse Measurements</h3><div class='form-grid'>
+      <input type='text' name='shoulder' placeholder='Shoulder'>
+      <input type='text' name='chest' placeholder='Chest'>
+      <input type='text' name='bust' placeholder='Bust'>
+      <input type='text' name='waist' placeholder='Waist'>
+      <input type='text' name='bust_point' placeholder='Bust Point'>
+      <input type='text' name='bust_to_bust' placeholder='Bust to Bust'>
+      <input type='text' name='sleeves' placeholder='Sleeves'>
+      <input type='text' name='penalty_crease' placeholder='Penalty Crease'>
+      <input type='text' name='back_neck' placeholder='Back Neck'>
+      <input type='text' name='front_neck' placeholder='Front Neck'>
+      <input type='text' name='length' placeholder='Length'>
+      <input type='text' name='lower_chest' placeholder='Lower Chest'>
+      <input type='text' name='neck_round' placeholder='Neck Round'>
+    </div></div>`,
+    pant: `<div class='garment-fields'><h3>Pant Measurements</h3><div class='form-grid'>
+      <input type='text' name='pant_waist' placeholder='Waist'>
+      <input type='text' name='hip' placeholder='Hip'>
+      <input type='text' name='pant_length' placeholder='Length'>
+      <input type='text' name='thigh' placeholder='Thigh'>
+      <input type='text' name='knee' placeholder='Knee'>
+      <input type='text' name='bottom' placeholder='Bottom'>
+    </div></div>`,
+    dress: `<div class='garment-fields'><h3>Dress Measurements</h3><div class='form-grid'>
+      <input type='text' name='dress_shoulder' placeholder='Shoulder'>
+      <input type='text' name='dress_chest' placeholder='Chest'>
+      <input type='text' name='dress_waist' placeholder='Waist'>
+      <input type='text' name='dress_hip' placeholder='Hip'>
+      <input type='text' name='dress_length' placeholder='Length'>
+      <input type='text' name='arm_whole_round' placeholder='Arm Whole Round'>
+      <input type='text' name='dress_sleeves' placeholder='Sleeves'>
+      <input type='text' name='penalty_circle' placeholder='Penalty Circle'>
+      <input type='text' name='dress_front_neck' placeholder='Front Neck'>
+      <input type='text' name='dress_back_neck' placeholder='Back Neck'>
+      <input type='text' name='matha_round' placeholder='Matha Round'>
+    </div></div>`
+  };
 
-                    <!-- Dress Fields -->
-                    <div id="measurementDressFields" class="garment-fields" style="display: none;">
-                       <h3 class="section-title"><i class="fas fa-female"></i> Dress Measurements</h3>
-                       <div class="form-grid">
-                           <input type="text" name="dress_shoulder" placeholder="Shoulder">
-                           <input type="text" name="dress_chest" placeholder="Chest">
-                           <input type="text" name="dress_waist" placeholder="Waist">
-                           <input type="text" name="dress_hip" placeholder="Hip"> <!-- ✅ Fixed spelling -->
-                           <input type="text" name="dress_length" placeholder="Length">
-                           <input type="text" name="arm_whole_round" placeholder="Arm Whole Round">
-                           <input type="text" name="dress_sleeves" placeholder="Sleeves">
-                           <input type="text" name="penalty_circle" placeholder="Penalty Circle">
-                           <input type="text" name="dress_front_neck" placeholder="Front Neck">
-                           <input type="text" name="dress_back_neck" placeholder="Back Neck">
-                           <input type="text" name="matha_round" placeholder="Matha Round">
-                      </div>
-                   </div>
+  const addMeasurementBtn = document.getElementById('addMeasurementBtn');
+  const customerForm = document.getElementById('customerForm');
+  const measurementModal = document.getElementById('measurementModal');
+  const measurementForm = document.getElementById('measurementForm');
+  const dynamicFields = document.getElementById('dynamicMeasurementFields');
 
-                   <div class="form-actions">
-                     <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">Cancel</button>
-                     <button type="submit" class="btn btn-primary">Save Measurements</button>
-                   </div>
-                </form>
-           </div>
-       </div>
+  if (addMeasurementBtn) {
+    addMeasurementBtn.addEventListener('click', function () {
+      // Show measurement modal
+      measurementModal.style.display = 'block';
+      // Optionally pass customer info if needed
+    });
+  }
 
-       <!-- JS Logic -->
-       <script>
-            // Garment type toggle logic
-            document.getElementById("measurementGarmentType").addEventListener("change", function () {
-                 const type = this.value;
-                 document.getElementById("measurementBlouseFields").style.display = "none";
-                 document.getElementById("measurementPantFields").style.display = "none";
-                 document.getElementById("measurementDressFields").style.display = "none";
-
-                 if (type === "blouse") {
-                    document.getElementById("measurementBlouseFields").style.display = "block";
-                 } else if (type === "pant") {
-                    document.getElementById("measurementPantFields").style.display = "block";
-                 } else if (type === "dress") {
-                    document.getElementById("measurementDressFields").style.display = "block";
-                 }
-               });
-
-               // Open modal and inject customer_id
-              function openMeasurementModal(customerId) {
-                  document.getElementById("measurementCustomerId").value = customerId;
-                  document.getElementById("measurementModal").style.display = "block";
-              }
-
-               // Close modal
-              document.querySelector("#measurementModal .close").addEventListener("click", function () {
-                 document.getElementById("measurementModal").style.display = "none";
-              });
-
-              document.getElementById("cancelMeasurementBtn").addEventListener("click", function () {
-                 document.getElementById("measurementModal").style.display = "none";
-              });
-
-            document.addEventListener("DOMContentLoaded", function () {
-                 const addBtn = document.getElementById("addNewBtn");
-                 const customerModal = document.getElementById("customerModal");
-             
-                 if (addBtn && customerModal) {
-                    addBtn.addEventListener("click", function () {
-                       customerModal.style.display = "block";
-
-                   });
-               }
-               const closeBtn = document.querySelector("#customerModal .close");
-               if (closeBtn) {
-                   closeBtn.addEventListener("click", function () {
-                       customerModal.style.display = "none";
-                   });
-               }
-            }); // <-- Added missing closing brace for DOMContentLoaded
-
-            // Add measurement form modal logic
-            document.addEventListener("DOMContentLoaded", function () {
-              const addBtn = document.getElementById("addNewBtn");
-              const formModal = document.getElementById("measurementForm");
-
-              if (addBtn && formModal) {
-                addBtn.addEventListener("click", function () {
-                  formModal.style.display = "block";
-                });
-              }
-
-              // Optional: close logic
-              const closeBtn = document.querySelector("#measurementForm .close");
-              if (closeBtn) {
-                closeBtn.addEventListener("click", function () {
-                  formModal.style.display = "none";
-                });
-              }
-            });
-       </script>
+  const garmentTypeCheckboxes = document.querySelectorAll('input[name="garment_types"]');
+  garmentTypeCheckboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      dynamicFields.innerHTML = '';
+      garmentTypeCheckboxes.forEach(function (cb) {
+        if (cb.checked) {
+          dynamicFields.innerHTML += garmentFields[cb.value];
+        }
+      });
+    });
+  });
+</script>
 
         <!-- Customers List -->
         <section class="customers-section">

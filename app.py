@@ -170,14 +170,59 @@ def get_customers():
 @app.route('/api/customers', methods=['POST'])
 @login_required
 def add_customer():
-    data = request.form  # or request.get_json() if you're using JSON
+    data = request.get_json()
     customer = Customer(
         customer_name=data['customer_name'],
         phone_number=data['phone_number']
     )
     db.session.add(customer)
+    db.session.flush()  # Get customer.id before commit
+
+    # Handle measurements if provided
+    measurements = data.get('measurements', [])
+    for m in measurements:
+        measurement = Measurement(
+            customer_id=customer.id,
+            garment_type=m['garment_type'],
+            delivery_date=m.get('delivery_date', ''),
+            additional_notes=m.get('additional_notes', '')
+        )
+        # Blouse
+        measurement.shoulder = m.get('shoulder')
+        measurement.chest = m.get('chest')
+        measurement.waist = m.get('waist')
+        measurement.bust = m.get('bust')
+        measurement.bust_point = m.get('bust_point')
+        measurement.bust_to_bust = m.get('bust_to_bust')
+        measurement.sleeves = m.get('sleeves')
+        measurement.penalty_crease = m.get('penalty_crease')
+        measurement.back_neck = m.get('back_neck')
+        measurement.front_neck = m.get('front_neck')
+        measurement.length = m.get('length')
+        measurement.lower_chest = m.get('lower_chest')
+        measurement.neck_round = m.get('neck_round')
+        # Pant
+        measurement.pant_waist = m.get('pant_waist')
+        measurement.pant_length = m.get('pant_length')
+        measurement.thigh = m.get('thigh')
+        measurement.knee = m.get('knee')
+        measurement.bottom = m.get('bottom')
+        measurement.hip = m.get('hip')
+        # Dress
+        measurement.dress_shoulder = m.get('dress_shoulder')
+        measurement.dress_chest = m.get('dress_chest')
+        measurement.dress_waist = m.get('dress_waist')
+        measurement.dress_hip = m.get('dress_hip')
+        measurement.dress_length = m.get('dress_length')
+        measurement.arm_whole_round = m.get('arm_whole_round')
+        measurement.dress_sleeves = m.get('dress_sleeves')
+        measurement.penalty_circle = m.get('penalty_circle')
+        measurement.dress_front_neck = m.get('dress_front_neck')
+        measurement.dress_back_neck = m.get('dress_back_neck')
+        measurement.matha_round = m.get('matha_round')
+        db.session.add(measurement)
     db.session.commit()
-    return jsonify({'message': 'Customer added', 'customer_id': customer.id}), 201
+    return jsonify({'message': 'Customer and measurements added', 'customer_id': customer.id}), 201
 
 @app.route('/api/measurements', methods=['POST'])
 @login_required
