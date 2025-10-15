@@ -50,162 +50,9 @@
                             <label for="phoneNumber">Phone Number *</label>
                             <input type="tel" id="phoneNumber" name="phone_number" required>
                         </div>
-                        <div class="form-group">
-                            <label for="garmentType">Garment Type *</label>
-                            <select id="garmentType" name="garment_type" required>
-                                <option value="blouse">Blouse</option>
-                                <option value="pant">Pant</option>
-                                <option value="dress">Dress</option>
-                            </select>
-                        </div>
                     </div>
 
-                    <!-- Blouse Fields -->
-                    <div id="blouseFields" class="garment-fields">
-                        <h3 class="section-title">
-                            <i class="fas fa-tshirt"></i>
-                            Blouse Measurements
-                        </h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="shoulder">Shoulder *</label>
-                                <input type="text" id="shoulder" name="shoulder">
-                            </div>
-                            <div class="form-group">
-                                <label for="chest">Chest *</label>
-                                <input type="text" id="chest" name="chest">
-                            </div>
-                            <div class="form-group">
-                                <label for="bust">Bust *</label>
-                                <input type="text" id="bust" name="bust">
-                            </div>
-                            <div class="form-group">
-                                <label for="waist">Waist *</label>
-                                <input type="text" id="waist" name="waist">
-                            </div>
-                            <div class="form-group">
-                                <label for="bustPoint">Bust Point *</label>
-                                <input type="text" id="bustPoint" name="bust_point">
-                            </div>
-                            <div class="form-group">
-                                <label for="bustToBust">Bust to Bust *</label>
-                                <input type="text" id="bustToBust" name="bust_to_bust">
-                            </div>
-                            <div class="form-group">
-                                <label for="sleeves">Sleeves *</label>
-                                <input type="text" id="sleeves" name="sleeves">
-                            </div>
-                            <div class="form-group">
-                                <label for="penaltyCrease">Penalty Crease *</label>
-                                <input type="text" id="penaltyCrease" name="penalty_crease">
-                            </div>
-                            <div class="form-group">
-                                <label for="backNeck">Back Neck *</label>
-                                <input type="text" id="backNeck" name="back_neck">
-                            </div>
-                            <div class="form-group">
-                                <label for="frontNeck">Front Neck *</label>
-                                <input type="text" id="frontNeck" name="front_neck">
-                            </div>
-                            <div class="form-group">
-                                <label for="length">Length *</label>
-                                <input type="text" id="length" name="length">
-                            </div>
-                            <div class="form-group">
-                                <label for="lowerChest">Lower Chest *</label>
-                                <input type="text" id="lowerChest" name="lower_chest">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pant Fields -->
-                    <div id="pantFields" class="garment-fields" style="display: none;">
-                        <h3 class="section-title">
-                            <i class="fas fa-user-tie"></i>
-                            Pant Measurements
-                        </h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="pantWaist">Waist *</label>
-                                <input type="text" id="pantWaist" name="pant_waist">
-                            </div>
-                            <div class="form-group">
-                                <label for="heap">Heap *</label>
-                                <input type="text" id="heap" name="heap">
-                            </div>
-                            <div class="form-group">
-                                <label for="pantLength">Length *</label>
-                                <input type="text" id="pantLength" name="pant_length">
-                            </div>
-                            <div class="form-group">
-                                <label for="thigh">Thigh *</label>
-                                <input type="text" id="thigh" name="thigh">
-                            </div>
-                            <div class="form-group">
-                                <label for="knee">Knee *</label>
-                                <input type="text" id="knee" name="knee">
-                            </div>
-                            <div class="form-group">
-                                <label for="bottom">Bottom *</label>
-                                <input type="text" id="bottom" name="bottom">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dress Fields -->
-                    <div id="dressFields" class="garment-fields" style="display: none;">
-                        <h3 class="section-title">
-                            <i class="fas fa-female"></i>
-                            Dress Measurements
-                        </h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="dressShoulder">Shoulder *</label>
-                                <input type="text" id="dressShoulder" name="dress_shoulder">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressChest">Chest *</label>
-                                <input type="text" id="dressChest" name="dress_chest">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressWaist">Waist *</label>
-                                <input type="text" id="dressWaist" name="dress_waist">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressHeap">Heap *</label>
-                                <input type="text" id="dressHeap" name="dress_heap">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressLength">Length *</label>
-                                <input type="text" id="dressLength" name="dress_length">
-                            </div>
-                            <div class="form-group">
-                                <label for="armWholeRound">Arm Whole Round *</label>
-                                <input type="text" id="armWholeRound" name="arm_whole_round">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressSleeves">Sleeves *</label>
-                                <input type="text" id="dressSleeves" name="dress_sleeves">
-                            </div>
-                            <div class="form-group">
-                                <label for="penaltyCircle">Penalty Circle *</label>
-                                <input type="text" id="penaltyCircle" name="penalty_circle">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressFrontNeck">Front Neck *</label>
-                                <input type="text" id="dressFrontNeck" name="dress_front_neck">
-                            </div>
-                            <div class="form-group">
-                                <label for="dressBackNeck">Back Neck *</label>
-                                <input type="text" id="dressBackNeck" name="dress_back_neck">
-                            </div>
-                            <div class="form-group">
-                                <label for="mathaRound">Matha Round *</label>
-                                <input type="text" id="mathaRound" name="matha_round">
-                            </div>
-                        </div>
-                    </div>
-
+                    
                     <div class="form-grid">
                         <div class="form-group full-width">
                             <label for="deliveryDate">Delivery Date *</label>
@@ -223,6 +70,122 @@
                 </form>
             </div>
         </div>
+
+        <!-- Measurement Modal -->
+        <div id="measurementModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Garment Measurements</h2>
+                    <span class="close">&times;</span>
+                </div>
+
+                <form id="measurementForm" action="/api/measurements" method="POST">
+                    <!-- Hidden Customer ID -->
+                    <input type="hidden" id="measurementCustomerId" name="customer_id">
+
+                    <!-- Garment Type Selector -->
+                    <div class="form-group">
+                        <label for="measurementGarmentType">Garment Type *</label>
+                      <select id="measurementGarmentType" name="garment_type" required>
+                        <option value="">Select Garment</option>
+                        <option value="blouse">Blouse</option>
+                        <option value="pant">Pant</option>
+                        <option value="dress">Dress</option>
+                      </select>
+                    </div>
+
+                    <!-- Blouse Fields -->
+                    <div id="measurementBlouseFields" class="garment-fields" style="display: none;">
+                      <h3 class="section-title"><i class="fas fa-tshirt"></i> Blouse Measurements</h3>
+                      <div class="form-grid">
+                         <input type="text" name="shoulder" placeholder="Shoulder">
+                         <input type="text" name="chest" placeholder="Chest">
+                         <input type="text" name="bust" placeholder="Bust">
+                         <input type="text" name="waist" placeholder="Waist">
+                         <input type="text" name="bust_point" placeholder="Bust Point">
+                         <input type="text" name="bust_to_bust" placeholder="Bust to Bust">
+                         <input type="text" name="sleeves" placeholder="Sleeves">
+                         <input type="text" name="penalty_crease" placeholder="Penalty Crease">
+                         <input type="text" name="back_neck" placeholder="Back Neck">
+                         <input type="text" name="front_neck" placeholder="Front Neck">
+                         <input type="text" name="length" placeholder="Length">
+                         <input type="text" name="lower_chest" placeholder="Lower Chest">
+                         <input type="text" name="neck_round" placeholder="Neck Round"> <!-- ✅ Added -->
+                      </div>
+                    </div>
+
+                    <!-- Pant Fields -->
+                    <div id="measurementPantFields" class="garment-fields" style="display: none;">
+                      <h3 class="section-title"><i class="fas fa-user-tie"></i> Pant Measurements</h3>
+                      <div class="form-grid">
+                         <input type="text" name="pant_waist" placeholder="Waist">
+                         <input type="text" name="hip" placeholder="Hip"> <!-- ✅ Fixed spelling -->
+                         <input type="text" name="pant_length" placeholder="Length">
+                         <input type="text" name="thigh" placeholder="Thigh">
+                         <input type="text" name="knee" placeholder="Knee">
+                         <input type="text" name="bottom" placeholder="Bottom">
+                      </div>
+                    </div>
+
+                    <!-- Dress Fields -->
+                    <div id="measurementDressFields" class="garment-fields" style="display: none;">
+                       <h3 class="section-title"><i class="fas fa-female"></i> Dress Measurements</h3>
+                       <div class="form-grid">
+                           <input type="text" name="dress_shoulder" placeholder="Shoulder">
+                           <input type="text" name="dress_chest" placeholder="Chest">
+                           <input type="text" name="dress_waist" placeholder="Waist">
+                           <input type="text" name="dress_hip" placeholder="Hip"> <!-- ✅ Fixed spelling -->
+                           <input type="text" name="dress_length" placeholder="Length">
+                           <input type="text" name="arm_whole_round" placeholder="Arm Whole Round">
+                           <input type="text" name="dress_sleeves" placeholder="Sleeves">
+                           <input type="text" name="penalty_circle" placeholder="Penalty Circle">
+                           <input type="text" name="dress_front_neck" placeholder="Front Neck">
+                           <input type="text" name="dress_back_neck" placeholder="Back Neck">
+                           <input type="text" name="matha_round" placeholder="Matha Round">
+                      </div>
+                   </div>
+
+                   <div class="form-actions">
+                     <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">Cancel</button>
+                     <button type="submit" class="btn btn-primary">Save Measurements</button>
+                   </div>
+                </form>
+           </div>
+       </div>
+
+       <!-- JS Logic -->
+       <script>
+            // Garment type toggle logic
+            document.getElementById("measurementGarmentType").addEventListener("change", function () {
+                 const type = this.value;
+                 document.getElementById("measurementBlouseFields").style.display = "none";
+                 document.getElementById("measurementPantFields").style.display = "none";
+                 document.getElementById("measurementDressFields").style.display = "none";
+
+                 if (type === "blouse") {
+                    document.getElementById("measurementBlouseFields").style.display = "block";
+                 } else if (type === "pant") {
+                    document.getElementById("measurementPantFields").style.display = "block";
+                 } else if (type === "dress") {
+                    document.getElementById("measurementDressFields").style.display = "block";
+                 }
+               });
+
+               // Open modal and inject customer_id
+              function openMeasurementModal(customerId) {
+                  document.getElementById("measurementCustomerId").value = customerId;
+                  document.getElementById("measurementModal").style.display = "block";
+              }
+
+               // Close modal
+              document.querySelector("#measurementModal .close").addEventListener("click", function () {
+                 document.getElementById("measurementModal").style.display = "none";
+              });
+
+              document.getElementById("cancelMeasurementBtn").addEventListener("click", function () {
+                 document.getElementById("measurementModal").style.display = "none";
+              });
+       </script>
 
         <!-- Customers List -->
         <section class="customers-section">
