@@ -230,7 +230,9 @@
         const inputs = dynamicFields.querySelectorAll(`.garment-fields input[name]`);
         inputs.forEach(input => {
           if (input.closest('.garment-fields').querySelector('h3').textContent.toLowerCase().includes(type)) {
-            fields[input.name] = input.value;
+            // Convert to float if possible, else keep as string
+            const val = input.value;
+            fields[input.name] = val === '' ? null : (isNaN(val) ? val : parseFloat(val));
           }
         });
         customerData.measurements.push(fields);
@@ -241,7 +243,12 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(customerData)
       })
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 405) {
+          throw new Error('Method Not Allowed: Check backend route and method.');
+        }
+        return res.json();
+      })
       .then(data => {
         if (data.customer_id) {
           alert('Customer and measurements saved!');

@@ -172,6 +172,8 @@ def get_customers():
 @app.route('/api/customers', methods=['POST'])
 @login_required
 def add_customer():
+    if request.method != 'POST':
+        return jsonify({'error': 'Method Not Allowed'}), 405
     if request.is_json:
         data = request.get_json()
     else:
@@ -193,38 +195,38 @@ def add_customer():
             additional_notes=m.get('additional_notes', '')
         )
         # Blouse
-        measurement.shoulder = m.get('shoulder')
-        measurement.chest = m.get('chest')
-        measurement.waist = m.get('waist')
-        measurement.bust = m.get('bust')
-        measurement.bust_point = m.get('bust_point')
-        measurement.bust_to_bust = m.get('bust_to_bust')
-        measurement.sleeves = m.get('sleeves')
-        measurement.penalty_crease = m.get('penalty_crease')
-        measurement.back_neck = m.get('back_neck')
-        measurement.front_neck = m.get('front_neck')
-        measurement.length = m.get('length')
-        measurement.lower_chest = m.get('lower_chest')
-        measurement.neck_round = m.get('neck_round')
+        measurement.shoulder = float(m.get('shoulder')) if m.get('shoulder') not in [None, ''] else None
+        measurement.chest = float(m.get('chest')) if m.get('chest') not in [None, ''] else None
+        measurement.waist = float(m.get('waist')) if m.get('waist') not in [None, ''] else None
+        measurement.bust = float(m.get('bust')) if m.get('bust') not in [None, ''] else None
+        measurement.bust_point = float(m.get('bust_point')) if m.get('bust_point') not in [None, ''] else None
+        measurement.bust_to_bust = float(m.get('bust_to_bust')) if m.get('bust_to_bust') not in [None, ''] else None
+        measurement.sleeves = float(m.get('sleeves')) if m.get('sleeves') not in [None, ''] else None
+        measurement.penalty_crease = float(m.get('penalty_crease')) if m.get('penalty_crease') not in [None, ''] else None
+        measurement.back_neck = float(m.get('back_neck')) if m.get('back_neck') not in [None, ''] else None
+        measurement.front_neck = float(m.get('front_neck')) if m.get('front_neck') not in [None, ''] else None
+        measurement.length = float(m.get('length')) if m.get('length') not in [None, ''] else None
+        measurement.lower_chest = float(m.get('lower_chest')) if m.get('lower_chest') not in [None, ''] else None
+        measurement.neck_round = float(m.get('neck_round')) if m.get('neck_round') not in [None, ''] else None
         # Pant
-        measurement.pant_waist = m.get('pant_waist')
-        measurement.pant_length = m.get('pant_length')
-        measurement.thigh = m.get('thigh')
-        measurement.knee = m.get('knee')
-        measurement.bottom = m.get('bottom')
-        measurement.hip = m.get('hip')
+        measurement.pant_waist = float(m.get('pant_waist')) if m.get('pant_waist') not in [None, ''] else None
+        measurement.pant_length = float(m.get('pant_length')) if m.get('pant_length') not in [None, ''] else None
+        measurement.thigh = float(m.get('thigh')) if m.get('thigh') not in [None, ''] else None
+        measurement.knee = float(m.get('knee')) if m.get('knee') not in [None, ''] else None
+        measurement.bottom = float(m.get('bottom')) if m.get('bottom') not in [None, ''] else None
+        measurement.hip = float(m.get('hip')) if m.get('hip') not in [None, ''] else None
         # Dress
-        measurement.dress_shoulder = m.get('dress_shoulder')
-        measurement.dress_chest = m.get('dress_chest')
-        measurement.dress_waist = m.get('dress_waist')
-        measurement.dress_hip = m.get('dress_hip')
-        measurement.dress_length = m.get('dress_length')
-        measurement.arm_whole_round = m.get('arm_whole_round')
-        measurement.dress_sleeves = m.get('dress_sleeves')
-        measurement.penalty_circle = m.get('penalty_circle')
-        measurement.dress_front_neck = m.get('dress_front_neck')
-        measurement.dress_back_neck = m.get('dress_back_neck')
-        measurement.matha_round = m.get('matha_round')
+        measurement.dress_shoulder = float(m.get('dress_shoulder')) if m.get('dress_shoulder') not in [None, ''] else None
+        measurement.dress_chest = float(m.get('dress_chest')) if m.get('dress_chest') not in [None, ''] else None
+        measurement.dress_waist = float(m.get('dress_waist')) if m.get('dress_waist') not in [None, ''] else None
+        measurement.dress_hip = float(m.get('dress_hip')) if m.get('dress_hip') not in [None, ''] else None
+        measurement.dress_length = float(m.get('dress_length')) if m.get('dress_length') not in [None, ''] else None
+        measurement.arm_whole_round = float(m.get('arm_whole_round')) if m.get('arm_whole_round') not in [None, ''] else None
+        measurement.dress_sleeves = float(m.get('dress_sleeves')) if m.get('dress_sleeves') not in [None, ''] else None
+        measurement.penalty_circle = float(m.get('penalty_circle')) if m.get('penalty_circle') not in [None, ''] else None
+        measurement.dress_front_neck = float(m.get('dress_front_neck')) if m.get('dress_front_neck') not in [None, ''] else None
+        measurement.dress_back_neck = float(m.get('dress_back_neck')) if m.get('dress_back_neck') not in [None, ''] else None
+        measurement.matha_round = float(m.get('matha_round')) if m.get('matha_round') not in [None, ''] else None
         db.session.add(measurement)
     db.session.commit()
     return jsonify({'message': 'Customer and measurements added', 'customer_id': customer.id}), 201
