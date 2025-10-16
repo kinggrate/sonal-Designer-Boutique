@@ -14,260 +14,161 @@
         <header class="header">
             <div class="logo-container">
                 <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-07-06 at 18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo">
+                <div>
+                    <h1 class="main-title">Orders Management System</h1>
+                    <p class="subtitle">Fashion Designing Training Institute</p>
+                </div>
             </div>
-            <h1 class="main-title">Orders Management System</h1>
-            <p class="subtitle">Fashion Designing Training Institute</p>
         </header>
 
         <!-- Search Section -->
         <section class="search-section">
-          <div class="search-container">
-            
-            <!-- Search Box -->
-            <div class="search-box">
-              <label for="searchInput" class="visually-hidden">Search Customers</label>
-              <i class="fas fa-search search-icon" aria-hidden="true"></i>
-              <input 
-            type="text" 
-            id="searchInput" 
-            class="search-input" 
-            placeholder="Search customers by name or phone..." 
-            autocomplete="off">
+            <div class="search-container">
+                <!-- Search Box -->
+                <div class="search-box">
+                    <label for="searchInput" class="visually-hidden">Search Customers</label>
+                    <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search customers by name or phone..." autocomplete="off">
+                </div>
+                <!-- Add Customer Button -->
+                <div class="search-actions">
+                    <button id="addNewBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        <span>Add New Customer</span>
+                    </button>
+                </div>
             </div>
-
-            <!-- Add Customer Button -->
-            <div class="search-actions">
-              <button id="addNewBtn" class="btn btn-primary">
-            <i class="fas fa-plus"></i>
-            <span>Add New Customer</span>
-              </button>
-            </div>
-
-          </div>
         </section>
 
         <!-- Customer Form Modal -->
         <div id="customerModal" class="modal">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2 id="modalTitle">Add New Customer</h2>
-              <span class="close">&times;</span>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add New Customer</h2>
+                    <span class="close" id="customerCloseBtn">&times;</span>
+                </div>
+                <form id="customerForm" class="customer-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name</label>
+                            <input type="text" id="customerName" name="customer_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="tel" id="phoneNumber" name="phone_number" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Measurements List -->
+                    <div class="measurements-section">
+                        <h3>Measurements Added: <span id="measurementCount">0</span></h3>
+                        <div id="measurementsList"></div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="addMeasurementBtn">Add Measurements</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Save Customer</button>
+                    </div>
+                </form>
             </div>
-            <form id="customerForm" class="customer-form" action="#" method="POST">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="customerName">Customer Name *</label>
-                  <input type="text" id="customerName" name="customer_name" required>
-                </div>
-                <div class="form-group">
-                  <label for="phoneNumber">Phone Number *</label>
-                  <input type="tel" id="phoneNumber" name="phone_number" required>
-                </div>
-              </div>
-              <div class="form-grid">
-                <div class="form-group full-width">
-                  <label for="deliveryDate">Delivery Date *</label>
-                  <input type="date" id="deliveryDate" name="delivery_date" required>
-                </div>
-                <div class="form-group full-width">
-                  <label for="additionalNotes">Additional Notes</label>
-                  <textarea id="additionalNotes" name="additional_notes" rows="3" placeholder="Any special instructions or notes..."></textarea>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                <button type="button" class="btn btn-primary" id="addMeasurementBtn">Add Measurement for this Customer</button>
-                <button type="submit" class="btn btn-primary" id="submitBtn">Save Customer</button>
-              </div>
-            </form>
-          </div>
         </div>
 
-        <!-- Measurement Modal (Dynamic) -->
+        <!-- Measurement Modal -->
         <div id="measurementModal" class="modal">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2>Add Garment Measurements</h2>
-              <span class="close">&times;</span>
-            </div>
-            <form id="measurementForm" action="#" method="POST">
-              <input type="hidden" id="measurementCustomerId" name="customer_id">
-              <div class="form-group">
-                <label>Select Garment Types *</label>
-                <div class="garment-type-checkboxes">
-                  <label><input type="checkbox" name="garment_types" value="blouse"> Blouse</label>
-                  <label><input type="checkbox" name="garment_types" value="pant"> Pant</label>
-                  <label><input type="checkbox" name="garment_types" value="dress"> Dress</label>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Garment Measurements</h2>
+                    <span class="close" id="measurementCloseBtn">&times;</span>
                 </div>
-              </div>
-              <div id="dynamicMeasurementFields">
-                <!-- Dynamic measurement fields will be injected here -->
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Measurements</button>
-              </div>
-            </form>
-          </div>
+                <form id="measurementForm">
+                    <!-- Garment Type Selection -->
+                    <div class="form-group">
+                        <label>Select Garment Type (Choose One)</label>
+                        <div class="garment-type-radios">
+                            <label><input type="radio" name="garment_type" value="blouse"> Blouse</label>
+                            <label><input type="radio" name="garment_type" value="pant"> Pant</label>
+                            <label><input type="radio" name="garment_type" value="dress"> Dress</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="measurementDeliveryDate">Delivery Date</label>
+                            <input type="date" id="measurementDeliveryDate" name="delivery_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="measurementNotes">Additional Notes</label>
+                            <textarea id="measurementNotes" name="additional_notes" rows="2" placeholder="Special instructions for this garment..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Measurement Fields -->
+                    <div id="dynamicMeasurementFields"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="saveMeasurementBtn">Save Measurements</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <!-- JS Logic -->
-        <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Modal logic
-    const addBtn = document.getElementById("addNewBtn");
-    const customerModal = document.getElementById("customerModal");
-    const customerCloseBtn = document.querySelector("#customerModal .close");
-    const addMeasurementBtn = document.getElementById('addMeasurementBtn');
-    const measurementModal = document.getElementById('measurementModal');
-    const measurementCloseBtn = document.querySelector("#measurementModal .close");
-    const cancelMeasurementBtn = document.getElementById("cancelMeasurementBtn");
-    const customerForm = document.getElementById('customerForm');
-    const measurementForm = document.getElementById('measurementForm');
-    const dynamicFields = document.getElementById('dynamicMeasurementFields');
+        <!-- Edit Customer Modal -->
+        <div id="editCustomerModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Customer</h2>
+                    <span class="close" id="editCustomerCloseBtn">&times;</span>
+                </div>
+                <form id="editCustomerForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editCustomerName">Customer Name</label>
+                            <input type="text" id="editCustomerName" name="customer_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPhoneNumber">Phone Number</label>
+                            <input type="tel" id="editPhoneNumber" name="phone_number" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    // Open customer modal
-    if (addBtn && customerModal) {
-      addBtn.addEventListener("click", function () {
-        customerModal.style.display = "block";
-      });
-    }
-    // Close customer modal
-    if (customerCloseBtn) {
-      customerCloseBtn.addEventListener("click", function () {
-        customerModal.style.display = "none";
-      });
-    }
-    // Open measurement modal
-    if (addMeasurementBtn && measurementModal) {
-      addMeasurementBtn.addEventListener('click', function () {
-        measurementModal.style.display = 'block';
-      });
-    }
-    // Close measurement modal
-    if (measurementCloseBtn) {
-      measurementCloseBtn.addEventListener("click", function () {
-        measurementModal.style.display = "none";
-      });
-    }
-    if (cancelMeasurementBtn) {
-      cancelMeasurementBtn.addEventListener("click", function () {
-        measurementModal.style.display = "none";
-      });
-    }
-
-    // Dynamic measurement fields logic
-    const garmentFields = {
-      blouse: `<div class='garment-fields'><h3>Blouse Measurements</h3><div class='form-grid'>
-        <input type='text' name='shoulder' placeholder='Shoulder'>
-        <input type='text' name='chest' placeholder='Chest'>
-        <input type='text' name='bust' placeholder='Bust'>
-        <input type='text' name='waist' placeholder='Waist'>
-        <input type='text' name='bust_point' placeholder='Bust Point'>
-        <input type='text' name='bust_to_bust' placeholder='Bust to Bust'>
-        <input type='text' name='sleeves' placeholder='Sleeves'>
-        <input type='text' name='penalty_crease' placeholder='Penalty Crease'>
-        <input type='text' name='back_neck' placeholder='Back Neck'>
-        <input type='text' name='front_neck' placeholder='Front Neck'>
-        <input type='text' name='length' placeholder='Length'>
-        <input type='text' name='lower_chest' placeholder='Lower Chest'>
-        <input type='text' name='neck_round' placeholder='Neck Round'>
-      </div></div>`,
-      pant: `<div class='garment-fields'><h3>Pant Measurements</h3><div class='form-grid'>
-        <input type='text' name='pant_waist' placeholder='Waist'>
-        <input type='text' name='hip' placeholder='Hip'>
-        <input type='text' name='pant_length' placeholder='Length'>
-        <input type='text' name='thigh' placeholder='Thigh'>
-        <input type='text' name='knee' placeholder='Knee'>
-        <input type='text' name='bottom' placeholder='Bottom'>
-      </div></div>`,
-      dress: `<div class='garment-fields'><h3>Dress Measurements</h3><div class='form-grid'>
-        <input type='text' name='dress_shoulder' placeholder='Shoulder'>
-        <input type='text' name='dress_chest' placeholder='Chest'>
-        <input type='text' name='dress_waist' placeholder='Waist'>
-        <input type='text' name='dress_hip' placeholder='Hip'>
-        <input type='text' name='dress_length' placeholder='Length'>
-        <input type='text' name='arm_whole_round' placeholder='Arm Whole Round'>
-        <input type='text' name='dress_sleeves' placeholder='Sleeves'>
-        <input type='text' name='penalty_circle' placeholder='Penalty Circle'>
-        <input type='text' name='dress_front_neck' placeholder='Front Neck'>
-        <input type='text' name='dress_back_neck' placeholder='Back Neck'>
-        <input type='text' name='matha_round' placeholder='Matha Round'>
-      </div></div>`
-    };
-
-    const garmentTypeCheckboxes = document.querySelectorAll('input[name="garment_types"]');
-    garmentTypeCheckboxes.forEach(function (checkbox) {
-      checkbox.addEventListener('change', function () {
-        dynamicFields.innerHTML = '';
-        garmentTypeCheckboxes.forEach(function (cb) {
-          if (cb.checked) {
-            dynamicFields.innerHTML += garmentFields[cb.value];
-          }
-        });
-      });
-    });
-
-    // Submit customer and measurements together
-    customerForm.addEventListener('submit', function (e) {
-      console.log("Customer form submit handler running"); // Debug log
-      e.preventDefault(); // Prevent default form submission
-      // Collect customer info
-      const customerData = {
-        customer_name: document.getElementById('customerName').value,
-        phone_number: document.getElementById('phoneNumber').value,
-        delivery_date: document.getElementById('deliveryDate').value,
-        additional_notes: document.getElementById('additionalNotes').value,
-        measurements: []
-      };
-      // Collect measurements from dynamic fields
-      const selectedTypes = Array.from(document.querySelectorAll('input[name="garment_types"]:checked')).map(cb => cb.value);
-      selectedTypes.forEach(type => {
-        const fields = {};
-        fields.garment_type = type;
-        fields.delivery_date = customerData.delivery_date;
-        fields.additional_notes = customerData.additional_notes;
-        // Get all inputs for this garment type
-        const inputs = dynamicFields.querySelectorAll(`.garment-fields input[name]`);
-        inputs.forEach(input => {
-          if (input.closest('.garment-fields').querySelector('h3').textContent.toLowerCase().includes(type)) {
-            // Convert to float if possible, else keep as string
-            const val = input.value;
-            fields[input.name] = val === '' ? null : (isNaN(val) ? val : parseFloat(val));
-          }
-        });
-        customerData.measurements.push(fields);
-      });
-      // Send to backend
-      fetch('/api/customers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(customerData)
-      })
-      .then(res => {
-        if (res.status === 405) {
-          throw new Error('Method Not Allowed: Check backend route and method.');
-        }
-        return res.json();
-      })
-      .then(data => {
-        if (data.customer_id) {
-          alert('Customer and measurements saved!');
-          customerModal.style.display = 'none';
-          measurementModal.style.display = 'none';
-          customerForm.reset();
-          measurementForm.reset();
-          dynamicFields.innerHTML = '';
-        } else {
-          alert('Error: ' + (data.message || 'Unknown error'));
-        }
-      })
-      .catch(err => {
-        alert('Error: ' + err);
-      });
-    });
-  });
-</script>
+        <!-- Edit Measurement Modal -->
+        <div id="editMeasurementModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Measurement</h2>
+                    <span class="close" id="editMeasurementCloseBtn">&times;</span>
+                </div>
+                <form id="editMeasurementForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editMeasurementDeliveryDate">Delivery Date</label>
+                            <input type="date" id="editMeasurementDeliveryDate" name="delivery_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editMeasurementNotes">Additional Notes</label>
+                            <textarea id="editMeasurementNotes" name="additional_notes" rows="2"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Edit Fields -->
+                    <div id="dynamicEditFields"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelEditMeasurementBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Measurement</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Customers List -->
         <section class="customers-section">
@@ -275,11 +176,10 @@
                 <h2>Customer Orders</h2>
                 <div class="header-actions">
                     <div class="customers-count">
-                    <span id="customersCount">0</span> customers
+                        <span id="customersCount">0</span> customers
                     </div>
                     <a href="{{ url_for('logout') }}" class="btn btn-secondary logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </div>
             </div>
@@ -293,11 +193,537 @@
             <div class="spinner"></div>
             <p>Loading...</p>
         </div>
-
-        <!-- Toast Notifications -->
-        <div id="toast" class="toast"></div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal elements
+            const addBtn = document.getElementById('addNewBtn');
+            const customerModal = document.getElementById('customerModal');
+            const customerCloseBtn = document.getElementById('customerCloseBtn');
+            const addMeasurementBtn = document.getElementById('addMeasurementBtn');
+            const measurementModal = document.getElementById('measurementModal');
+            const measurementCloseBtn = document.getElementById('measurementCloseBtn');
+            const cancelMeasurementBtn = document.getElementById('cancelMeasurementBtn');
+            const saveMeasurementBtn = document.getElementById('saveMeasurementBtn');
+            
+            // Edit modals
+            const editCustomerModal = document.getElementById('editCustomerModal');
+            const editCustomerCloseBtn = document.getElementById('editCustomerCloseBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const editMeasurementModal = document.getElementById('editMeasurementModal');
+            const editMeasurementCloseBtn = document.getElementById('editMeasurementCloseBtn');
+            const cancelEditMeasurementBtn = document.getElementById('cancelEditMeasurementBtn');
+            
+            // Forms
+            const customerForm = document.getElementById('customerForm');
+            const measurementForm = document.getElementById('measurementForm');
+            const editCustomerForm = document.getElementById('editCustomerForm');
+            const editMeasurementForm = document.getElementById('editMeasurementForm');
+            const dynamicFields = document.getElementById('dynamicMeasurementFields');
+            const dynamicEditFields = document.getElementById('dynamicEditFields');
+            const measurementsList = document.getElementById('measurementsList');
+            const measurementCount = document.getElementById('measurementCount');
+            
+            // Search
+            const searchInput = document.getElementById('searchInput');
+            
+            // Store measurements temporarily
+            let currentMeasurements = [];
+            let editingCustomerId = null;
+            let editingMeasurementId = null;
+
+            // FIXED: Search functionality with debounce
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const query = this.value.trim();
+                    searchCustomers(query);
+                }, 300);
+            });
+
+            function searchCustomers(query) {
+                const url = query ? `/api/customers/search?q=${encodeURIComponent(query)}` : '/api/customers';
+                fetch(url)
+                    .then(res => res.json())
+                    .then(customers => {
+                        displayCustomers(customers);
+                    })
+                    .catch(err => console.error('Search error:', err));
+            }
+
+            // Open customer modal
+            if (addBtn && customerModal) {
+                addBtn.addEventListener('click', function() {
+                    customerModal.style.display = 'block';
+                    document.getElementById('modalTitle').textContent = 'Add New Customer';
+                    customerForm.reset();
+                    currentMeasurements = [];
+                    updateMeasurementsList();
+                });
+            }
+
+            // Close customer modal
+            if (customerCloseBtn) {
+                customerCloseBtn.addEventListener('click', function() {
+                    customerModal.style.display = 'none';
+                    currentMeasurements = [];
+                });
+            }
+
+            // Open measurement modal
+            if (addMeasurementBtn && measurementModal) {
+                addMeasurementBtn.addEventListener('click', function() {
+                    measurementModal.style.display = 'block';
+                    measurementForm.reset();
+                    dynamicFields.innerHTML = '';
+                });
+            }
+
+            // Close measurement modal
+            if (measurementCloseBtn) {
+                measurementCloseBtn.addEventListener('click', function() {
+                    measurementModal.style.display = 'none';
+                });
+            }
+
+            if (cancelMeasurementBtn) {
+                cancelMeasurementBtn.addEventListener('click', function() {
+                    measurementModal.style.display = 'none';
+                });
+            }
+
+            // Close edit modals
+            if (editCustomerCloseBtn) {
+                editCustomerCloseBtn.addEventListener('click', () => editCustomerModal.style.display = 'none');
+            }
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', () => editCustomerModal.style.display = 'none');
+            }
+            if (editMeasurementCloseBtn) {
+                editMeasurementCloseBtn.addEventListener('click', () => editMeasurementModal.style.display = 'none');
+            }
+            if (cancelEditMeasurementBtn) {
+                cancelEditMeasurementBtn.addEventListener('click', () => editMeasurementModal.style.display = 'none');
+            }
+
+            // Measurement fields templates
+            const garmentFields = {
+                blouse: `
+                    <div class="garment-fields">
+                        <h3>Blouse Measurements (in inches)</h3>
+                        <div class="form-grid">
+                            <input type="text" name="shoulder" placeholder="Shoulder">
+                            <input type="text" name="chest" placeholder="Chest">
+                            <input type="text" name="bust" placeholder="Bust">
+                            <input type="text" name="waist" placeholder="Waist">
+                            <input type="text" name="bust_point" placeholder="Bust Point">
+                            <input type="text" name="bust_to_bust" placeholder="Bust to Bust">
+                            <input type="text" name="sleeves" placeholder="Sleeves">
+                            <input type="text" name="penalty_crease" placeholder="Penalty Crease">
+                            <input type="text" name="back_neck" placeholder="Back Neck">
+                            <input type="text" name="front_neck" placeholder="Front Neck">
+                            <input type="text" name="length" placeholder="Length">
+                            <input type="text" name="lower_chest" placeholder="Lower Chest">
+                            <input type="text" name="neck_round" placeholder="Neck Round">
+                        </div>
+                    </div>`,
+                pant: `
+                    <div class="garment-fields">
+                        <h3>Pant Measurements (in inches)</h3>
+                        <div class="form-grid">
+                            <input type="text" name="pant_waist" placeholder="Waist">
+                            <input type="text" name="hip" placeholder="Hip">
+                            <input type="text" name="pant_length" placeholder="Length">
+                            <input type="text" name="thigh" placeholder="Thigh">
+                            <input type="text" name="knee" placeholder="Knee">
+                            <input type="text" name="bottom" placeholder="Bottom">
+                        </div>
+                    </div>`,
+                dress: `
+                    <div class="garment-fields">
+                        <h3>Dress Measurements (in inches)</h3>
+                        <div class="form-grid">
+                            <input type="text" name="dress_shoulder" placeholder="Shoulder">
+                            <input type="text" name="dress_chest" placeholder="Chest">
+                            <input type="text" name="dress_waist" placeholder="Waist">
+                            <input type="text" name="dress_hip" placeholder="Hip">
+                            <input type="text" name="dress_length" placeholder="Length">
+                            <input type="text" name="arm_whole_round" placeholder="Arm Whole Round">
+                            <input type="text" name="dress_sleeves" placeholder="Sleeves">
+                            <input type="text" name="penalty_circle" placeholder="Penalty Circle">
+                            <input type="text" name="dress_front_neck" placeholder="Front Neck">
+                            <input type="text" name="dress_back_neck" placeholder="Back Neck">
+                            <input type="text" name="matha_round" placeholder="Matha Round">
+                        </div>
+                    </div>`
+            };
+
+            // Handle garment type selection
+            document.addEventListener('change', function(e) {
+                if (e.target.name === 'garment_type') {
+                    const container = e.target.closest('.modal').querySelector('#dynamicMeasurementFields, #dynamicEditFields');
+                    if (container) {
+                        container.innerHTML = garmentFields[e.target.value];
+                    }
+                }
+            });
+
+            // Update measurements list display
+            function updateMeasurementsList() {
+                measurementCount.textContent = currentMeasurements.length;
+                measurementsList.innerHTML = currentMeasurements.map((m, index) => `
+                    <div class="measurement-item">
+                        <span>${m.garment_type.charAt(0).toUpperCase() + m.garment_type.slice(1)} - ${m.delivery_date}</span>
+                        <button type="button" onclick="removeMeasurement(${index})" class="btn-small btn-danger">Remove</button>
+                    </div>
+                `).join('');
+            }
+
+            // Remove measurement from list
+            window.removeMeasurement = function(index) {
+                currentMeasurements.splice(index, 1);
+                updateMeasurementsList();
+            };
+
+            // FIXED: Save measurement to temporary storage
+            if (saveMeasurementBtn) {
+                saveMeasurementBtn.addEventListener('click', function() {
+                    console.log('Save measurement clicked');
+                    
+                    // Get selected garment type
+                    const selectedType = document.querySelector('#measurementModal input[name="garment_type"]:checked');
+                    if (!selectedType) {
+                        alert('Please select a garment type!');
+                        return;
+                    }
+
+                    const deliveryDate = document.getElementById('measurementDeliveryDate').value;
+                    if (!deliveryDate) {
+                        alert('Please enter a delivery date!');
+                        return;
+                    }
+
+                    // Collect measurement data
+                    const measurementData = {
+                        garment_type: selectedType.value,
+                        delivery_date: deliveryDate,
+                        additional_notes: document.getElementById('measurementNotes').value
+                    };
+
+                    // Get all measurement inputs
+                    const inputs = dynamicFields.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        if (input.value.trim()) {
+                            measurementData[input.name] = input.value.trim();
+                        }
+                    });
+
+                    // Store measurement temporarily
+                    currentMeasurements.push(measurementData);
+                    updateMeasurementsList();
+
+                    // Close measurement modal
+                    measurementModal.style.display = 'none';
+                    
+                    // Reset measurement form
+                    measurementForm.reset();
+                    dynamicFields.innerHTML = '';
+                    
+                    // Show success message
+                    alert(`${selectedType.value.charAt(0).toUpperCase() + selectedType.value.slice(1)} measurement added! Click "Save Customer" to save everything.`);
+                });
+            }
+
+            // FIXED: Customer form submission
+            customerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Customer form submitted');
+
+                if (currentMeasurements.length === 0) {
+                    if (!confirm('No measurements added. Save customer without measurements?')) {
+                        return;
+                    }
+                }
+
+                // Collect customer data
+                const customerData = {
+                    customer_name: document.getElementById('customerName').value,
+                    phone_number: document.getElementById('phoneNumber').value,
+                    measurements: currentMeasurements
+                };
+
+                console.log('Sending data:', customerData);
+
+                // Send to backend
+                fetch('/api/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
+                })
+                .then(res => {
+                    console.log('Response status:', res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('Response data:', data);
+                    
+                    // Check for success
+                    if (data.message && data.message.includes('successfully')) {
+                        alert('Customer and measurements saved successfully!');
+                        
+                        // Close modal and reset
+                        customerModal.style.display = 'none';
+                        customerForm.reset();
+                        currentMeasurements = [];
+                        updateMeasurementsList();
+                        
+                        // Reload customer list
+                        loadCustomers();
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Error: ' + err.message);
+                });
+            });
+
+            // ADDED: Edit customer functionality
+            window.editCustomer = function(customerId) {
+                editingCustomerId = customerId;
+                
+                // Fetch customer data
+                fetch(`/api/customers`)
+                    .then(res => res.json())
+                    .then(customers => {
+                        const customer = customers.find(c => c.id === customerId);
+                        if (customer) {
+                            document.getElementById('editCustomerName').value = customer.customer_name;
+                            document.getElementById('editPhoneNumber').value = customer.phone_number;
+                            editCustomerModal.style.display = 'block';
+                        }
+                    })
+                    .catch(err => console.error('Error fetching customer:', err));
+            };
+
+            // ADDED: Edit customer form submission
+            editCustomerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const customerData = {
+                    customer_name: document.getElementById('editCustomerName').value,
+                    phone_number: document.getElementById('editPhoneNumber').value
+                };
+
+                fetch(`/api/customers/${editingCustomerId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.message && data.message.includes('successfully')) {
+                        alert('Customer updated successfully!');
+                        editCustomerModal.style.display = 'none';
+                        loadCustomers();
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Error: ' + err.message);
+                });
+            });
+
+            // ADDED: Edit measurement functionality
+            window.editMeasurement = function(measurementId) {
+                editingMeasurementId = measurementId;
+                
+                // Fetch all customers to find the measurement
+                fetch('/api/customers')
+                    .then(res => res.json())
+                    .then(customers => {
+                        let measurement = null;
+                        for (const customer of customers) {
+                            measurement = customer.measurements.find(m => m.id === measurementId);
+                            if (measurement) break;
+                        }
+                        
+                        if (measurement) {
+                            document.getElementById('editMeasurementDeliveryDate').value = measurement.delivery_date;
+                            document.getElementById('editMeasurementNotes').value = measurement.additional_notes || '';
+                            
+                            // Show measurement fields
+                            dynamicEditFields.innerHTML = garmentFields[measurement.garment_type];
+                            
+                            // Fill in measurement values
+                            const inputs = dynamicEditFields.querySelectorAll('input');
+                            inputs.forEach(input => {
+                                if (measurement[input.name]) {
+                                    input.value = measurement[input.name];
+                                }
+                            });
+                            
+                            editMeasurementModal.style.display = 'block';
+                        }
+                    })
+                    .catch(err => console.error('Error fetching measurement:', err));
+            };
+
+            // ADDED: Edit measurement form submission
+            editMeasurementForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const measurementData = {
+                    delivery_date: document.getElementById('editMeasurementDeliveryDate').value,
+                    additional_notes: document.getElementById('editMeasurementNotes').value
+                };
+
+                // Get all measurement inputs
+                const inputs = dynamicEditFields.querySelectorAll('input');
+                inputs.forEach(input => {
+                    measurementData[input.name] = input.value.trim() || null;
+                });
+
+                fetch(`/api/measurements/${editingMeasurementId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(measurementData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.message && data.message.includes('successfully')) {
+                        alert('Measurement updated successfully!');
+                        editMeasurementModal.style.display = 'none';
+                        loadCustomers();
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Error: ' + err.message);
+                });
+            });
+
+            // Delete functions
+            window.deleteCustomer = function(customerId) {
+                if (confirm('Are you sure you want to delete this customer and all their measurements?')) {
+                    fetch(`/api/customers/${customerId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message && data.message.includes('successfully')) {
+                            alert('Customer deleted successfully!');
+                            loadCustomers();
+                        } else {
+                            alert('Error: ' + (data.error || 'Unknown error'));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Error: ' + err.message);
+                    });
+                }
+            };
+
+            window.deleteMeasurement = function(measurementId) {
+                if (confirm('Are you sure you want to delete this measurement?')) {
+                    fetch(`/api/measurements/${measurementId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message && data.message.includes('successfully')) {
+                            alert('Measurement deleted successfully!');
+                            loadCustomers();
+                        } else {
+                            alert('Error: ' + (data.error || 'Unknown error'));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Error: ' + err.message);
+                    });
+                }
+            };
+
+            // Display customers function
+            function displayCustomers(customers) {
+                const customersList = document.getElementById('customersList');
+                const customersCount = document.getElementById('customersCount');
+                
+                if (customersCount) {
+                    customersCount.textContent = customers.length;
+                }
+                
+                if (customersList) {
+                    customersList.innerHTML = customers.map(customer => `
+                        <div class="customer-card">
+                            <div class="customer-header">
+                                <h3>${customer.customer_name}</h3>
+                                <div class="customer-actions">
+                                    <button onclick="editCustomer(${customer.id})" class="btn-small btn-secondary">Edit</button>
+                                    <button onclick="deleteCustomer(${customer.id})" class="btn-small btn-danger">Delete</button>
+                                </div>
+                            </div>
+                            <p><strong>Phone:</strong> ${customer.phone_number}</p>
+                            <p><strong>Measurements:</strong> ${customer.measurements.length}</p>
+                            
+                            ${customer.measurements.length > 0 ? `
+                                <div class="measurements-list">
+                                    <h4>Measurements:</h4>
+                                    ${customer.measurements.map(measurement => `
+                                        <div class="measurement-card">
+                                            <div class="measurement-info">
+                                                <strong>${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
+                                                <span>Delivery: ${measurement.delivery_date}</span>
+                                                ${measurement.additional_notes ? `<span>Notes: ${measurement.additional_notes}</span>` : ''}
+                                            </div>
+                                            <div class="measurement-actions">
+                                                <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-secondary">Edit</button>
+                                                <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-danger">Delete</button>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Load customers function
+            function loadCustomers() {
+                fetch('/api/customers')
+                    .then(res => res.json())
+                    .then(customers => {
+                        displayCustomers(customers);
+                    })
+                    .catch(err => console.error('Error loading customers:', err));
+            }
+
+            // Load customers on page load
+            loadCustomers();
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

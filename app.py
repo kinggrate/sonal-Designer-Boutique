@@ -438,15 +438,16 @@ def delete_measurement(measurement_id):
         db.session.rollback()
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-# Search route
+# FIXED: Enhanced search route with better functionality
 @app.route('/api/customers/search')
 @login_required
 def search_customers():
     try:
-        query = request.args.get('q', '')
+        query = request.args.get('q', '').strip()
         if query:
+            # Enhanced search: case-insensitive, partial matching
             customers = Customer.query.filter(
-                (Customer.customer_name.contains(query)) |
+                (Customer.customer_name.ilike(f'%{query}%')) |
                 (Customer.phone_number.contains(query))
             ).all()
         else:
