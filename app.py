@@ -159,10 +159,13 @@ def login_required(f):
     decorated_function.__name__ = f.__name__
     return decorated_function
 
-# Main routes
-@app.route('/')
+# FIXED: Main route accepts both GET and POST
+@app.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
+    if request.method == 'POST':
+        # Handle POST data if needed, or redirect to prevent resubmission
+        return redirect(url_for('index'))
     return render_template('index.html')
 
 # FIXED: Customer API routes with proper error handling
