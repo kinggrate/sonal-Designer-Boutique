@@ -13,7 +13,6 @@
         <!-- Header -->
         <header class="header">
             <div class="logo-container">
-                <!-- FIXED: Correct logo path -->
                 <img src="{{ url_for('static', filename='images/WhatsApp-Image-2025-07-06-at-18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo" onerror="this.style.display='none';">
                 <div>
                     <h1 class="main-title">Sonal Designer Boutique</h1>
@@ -25,13 +24,11 @@
         <!-- Search Section -->
         <section class="search-section">
             <div class="search-container">
-                <!-- Search Box -->
                 <div class="search-box">
                     <label for="searchInput" class="visually-hidden">Search Customers</label>
                     <i class="fas fa-search search-icon" aria-hidden="true"></i>
                     <input type="text" id="searchInput" class="search-input" placeholder="Search customers by name or phone..." autocomplete="off">
                 </div>
-                <!-- Add Customer Button -->
                 <div class="search-actions">
                     <button id="addNewBtn" class="btn btn-primary">
                         <i class="fas fa-user-plus"></i>
@@ -95,15 +92,15 @@
                         <div class="garment-type-radios">
                             <label>
                                 <input type="radio" name="garment_type" value="blouse">
-                                <i class="fas fa-female"></i> Blouse
+                                <span><i class="fas fa-female"></i> Blouse</span>
                             </label>
                             <label>
                                 <input type="radio" name="garment_type" value="pant">
-                                <i class="fas fa-male"></i> Pant
+                                <span><i class="fas fa-male"></i> Pant</span>
                             </label>
                             <label>
                                 <input type="radio" name="garment_type" value="dress">
-                                <i class="fas fa-dress"></i> Dress
+                                <span><i class="fas fa-dress"></i> Dress</span>
                             </label>
                         </div>
                     </div>
@@ -153,7 +150,7 @@
                         </div>
                     </div>
                     
-                    <!-- ADDED: Customer's Existing Measurements -->
+                    <!-- Customer's Existing Measurements -->
                     <div class="customer-measurements-section">
                         <h3><i class="fas fa-ruler-combined"></i> Customer's Measurements</h3>
                         <div id="customerMeasurementsList"></div>
@@ -222,15 +219,15 @@
                         <div class="garment-type-radios">
                             <label>
                                 <input type="radio" name="new_garment_type" value="blouse">
-                                <i class="fas fa-female"></i> Blouse
+                                <span><i class="fas fa-female"></i> Blouse</span>
                             </label>
                             <label>
                                 <input type="radio" name="new_garment_type" value="pant">
-                                <i class="fas fa-male"></i> Pant
+                                <span><i class="fas fa-male"></i> Pant</span>
                             </label>
                             <label>
                                 <input type="radio" name="new_garment_type" value="dress">
-                                <i class="fas fa-dress"></i> Dress
+                                <span><i class="fas fa-dress"></i> Dress</span>
                             </label>
                         </div>
                     </div>
@@ -306,7 +303,7 @@
             const editMeasurementCloseBtn = document.getElementById('editMeasurementCloseBtn');
             const cancelEditMeasurementBtn = document.getElementById('cancelEditMeasurementBtn');
             
-            // NEW: Add measurement to existing customer modal
+            // Add measurement to existing customer modal
             const addMeasurementToCustomerModal = document.getElementById('addMeasurementToCustomerModal');
             const addMeasurementToCustomerCloseBtn = document.getElementById('addMeasurementToCustomerCloseBtn');
             const cancelAddMeasurementToCustomerBtn = document.getElementById('cancelAddMeasurementToCustomerBtn');
@@ -337,7 +334,7 @@
             let editingMeasurementId = null;
             let allCustomers = []; // Store all customers for search
 
-            // FIXED: Cancel button event handler
+            // Cancel button event handler
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', function() {
                     customerModal.style.display = 'none';
@@ -347,7 +344,7 @@
                 });
             }
 
-            // FIXED: Search functionality with debounce
+            // Search functionality with debounce
             let searchTimeout;
             searchInput.addEventListener('input', function() {
                 clearTimeout(searchTimeout);
@@ -425,7 +422,7 @@
                 cancelEditMeasurementBtn.addEventListener('click', () => editMeasurementModal.style.display = 'none');
             }
             
-            // NEW: Close add measurement to customer modal
+            // Close add measurement to customer modal
             if (addMeasurementToCustomerCloseBtn) {
                 addMeasurementToCustomerCloseBtn.addEventListener('click', () => addMeasurementToCustomerModal.style.display = 'none');
             }
@@ -611,7 +608,7 @@
                 updateMeasurementsList();
             };
 
-            // FIXED: Save measurement to temporary storage
+            // Save measurement to temporary storage
             if (saveMeasurementBtn) {
                 saveMeasurementBtn.addEventListener('click', function() {
                     console.log('Save measurement clicked');
@@ -660,7 +657,7 @@
                 });
             }
 
-            // FIXED: Customer form submission
+            // Customer form submission
             customerForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 console.log('Customer form submitted');
@@ -717,7 +714,7 @@
                 });
             });
 
-            // ENHANCED: Edit customer functionality with measurements
+            // Edit customer functionality with measurements
             window.editCustomer = function(customerId) {
                 editingCustomerId = customerId;
                 
@@ -727,24 +724,8 @@
                     document.getElementById('editCustomerName').value = customer.customer_name;
                     document.getElementById('editPhoneNumber').value = customer.phone_number;
                     
-                    // Display customer's measurements
-                    customerMeasurementsList.innerHTML = customer.measurements.map(measurement => `
-                        <div class="measurement-card">
-                            <div class="measurement-info">
-                                <strong><i class="fas fa-tshirt"></i> ${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
-                                <span><i class="fas fa-calendar"></i> Delivery: ${measurement.delivery_date}</span>
-                                ${measurement.additional_notes ? `<span><i class="fas fa-sticky-note"></i> Notes: ${measurement.additional_notes}</span>` : ''}
-                            </div>
-                            <div class="measurement-actions">
-                                <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-edit">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-delete">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                    `).join('');
+                    // Display customer's measurements with collapsible feature
+                    displayCustomerMeasurements(customer.measurements);
                     
                     editCustomerModal.style.display = 'block';
                 } else {
@@ -752,7 +733,101 @@
                 }
             };
 
-            // NEW: Add measurement to existing customer
+            // NEW: Display customer measurements with collapsible groups by garment type
+            function displayCustomerMeasurements(measurements) {
+                // Group measurements by garment type
+                const groupedMeasurements = {};
+                measurements.forEach(measurement => {
+                    if (!groupedMeasurements[measurement.garment_type]) {
+                        groupedMeasurements[measurement.garment_type] = [];
+                    }
+                    groupedMeasurements[measurement.garment_type].push(measurement);
+                });
+
+                let html = '';
+                Object.keys(groupedMeasurements).forEach(garmentType => {
+                    const garmentMeasurements = groupedMeasurements[garmentType];
+                    const garmentIcon = garmentType === 'blouse' ? 'fa-female' : 
+                                      garmentType === 'pant' ? 'fa-male' : 'fa-dress';
+                    
+                    html += `
+                        <div class="garment-measurements-group">
+                            <button type="button" class="measurements-toggle" onclick="toggleMeasurements('${garmentType}')">
+                                <span><i class="fas ${garmentIcon}"></i> ${garmentType.charAt(0).toUpperCase() + garmentType.slice(1)} Measurements (${garmentMeasurements.length})</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="measurements-container" id="measurements-${garmentType}">
+                                ${garmentMeasurements.map(measurement => `
+                                    <div class="measurement-card">
+                                        <div class="measurement-info">
+                                            <strong><i class="fas fa-calendar"></i> Delivery: ${measurement.delivery_date}</strong>
+                                            ${measurement.additional_notes ? `<span><i class="fas fa-sticky-note"></i> Notes: ${measurement.additional_notes}</span>` : ''}
+                                            ${generateMeasurementDetails(measurement)}
+                                        </div>
+                                        <div class="measurement-actions">
+                                            <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-edit">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-delete">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                customerMeasurementsList.innerHTML = html;
+            }
+
+            // NEW: Toggle measurements visibility
+            window.toggleMeasurements = function(garmentType) {
+                const container = document.getElementById(`measurements-${garmentType}`);
+                const toggle = container.previousElementSibling;
+                
+                if (container.classList.contains('expanded')) {
+                    container.classList.remove('expanded');
+                    toggle.classList.remove('expanded');
+                } else {
+                    container.classList.add('expanded');
+                    toggle.classList.add('expanded');
+                }
+            };
+
+            // NEW: Generate measurement details for display
+            function generateMeasurementDetails(measurement) {
+                let details = '<div class="measurement-details">';
+                
+                if (measurement.garment_type === 'blouse') {
+                    const fields = ['shoulder', 'chest', 'waist', 'bust', 'bust_point', 'bust_to_bust', 'sleeves', 'penalty_crease', 'back_neck', 'front_neck', 'length', 'lower_chest', 'neck_round'];
+                    fields.forEach(field => {
+                        if (measurement[field]) {
+                            details += `<span>${field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${measurement[field]}"</span>`;
+                        }
+                    });
+                } else if (measurement.garment_type === 'pant') {
+                    const fields = ['pant_waist', 'pant_length', 'thigh', 'knee', 'bottom', 'hip'];
+                    fields.forEach(field => {
+                        if (measurement[field]) {
+                            details += `<span>${field.replace(/pant_|_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${measurement[field]}"</span>`;
+                        }
+                    });
+                } else if (measurement.garment_type === 'dress') {
+                    const fields = ['dress_shoulder', 'dress_chest', 'dress_waist', 'dress_hip', 'dress_length', 'arm_whole_round', 'dress_sleeves', 'penalty_circle', 'dress_front_neck', 'dress_back_neck', 'matha_round'];
+                    fields.forEach(field => {
+                        if (measurement[field]) {
+                            details += `<span>${field.replace(/dress_|_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${measurement[field]}"</span>`;
+                        }
+                    });
+                }
+                
+                details += '</div>';
+                return details;
+            }
+
+            // Add measurement to existing customer
             if (addNewMeasurementBtn) {
                 addNewMeasurementBtn.addEventListener('click', function() {
                     const customer = allCustomers.find(c => c.id === editingCustomerId);
@@ -764,7 +839,7 @@
                 });
             }
 
-            // NEW: Add measurement to customer form submission
+            // Add measurement to customer form submission
             addMeasurementToCustomerForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -816,7 +891,7 @@
                 });
             });
 
-            // ADDED: Edit customer form submission
+            // Edit customer form submission
             editCustomerForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -848,7 +923,7 @@
                 });
             });
 
-            // FIXED: Edit measurement functionality
+            // Edit measurement functionality
             window.editMeasurement = function(measurementId) {
                 console.log('Edit measurement clicked for ID:', measurementId);
                 editingMeasurementId = measurementId;
@@ -886,7 +961,7 @@
                 }
             };
 
-            // FIXED: Edit measurement form submission
+            // Edit measurement form submission
             editMeasurementForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -976,7 +1051,7 @@
                 }
             };
 
-            // Display customers function
+            // Display customers function with collapsible measurements
             function displayCustomers(customers) {
                 const customersList = document.getElementById('customersList');
                 const customersCount = document.getElementById('customersCount');
@@ -1017,29 +1092,53 @@
                             
                             ${customer.measurements.length > 0 ? `
                                 <div class="measurements-list">
-                                    <h4><i class="fas fa-ruler-combined"></i> Measurements:</h4>
-                                    ${customer.measurements.map(measurement => `
-                                        <div class="measurement-card">
-                                            <div class="measurement-info">
-                                                <strong><i class="fas fa-tshirt"></i> ${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
-                                                <span><i class="fas fa-calendar"></i> Delivery: ${measurement.delivery_date}</span>
-                                                ${measurement.additional_notes ? `<span><i class="fas fa-sticky-note"></i> Notes: ${measurement.additional_notes}</span>` : ''}
-                                            </div>
-                                            <div class="measurement-actions">
-                                                <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-edit">
-                                                    <i class="fas fa-edit"></i> Edit
-                                                </button>
-                                                <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-delete">
-                                                    <i class="fas fa-trash"></i> Delete
-                                                </button>
-                                            </div>
-                                        </div>
-                                    `).join('')}
+                                    <button class="measurements-toggle" onclick="toggleCustomerMeasurements(${customer.id})">
+                                        <span><i class="fas fa-ruler-combined"></i> View Measurements (${customer.measurements.length})</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="measurements-container" id="customer-measurements-${customer.id}">
+                                        ${generateCustomerMeasurementsDisplay(customer.measurements)}
+                                    </div>
                                 </div>
                             ` : ''}
                         </div>
                     `).join('');
                 }
+            }
+
+            // NEW: Toggle customer measurements in main display
+            window.toggleCustomerMeasurements = function(customerId) {
+                const container = document.getElementById(`customer-measurements-${customerId}`);
+                const toggle = container.previousElementSibling;
+                
+                if (container.classList.contains('expanded')) {
+                    container.classList.remove('expanded');
+                    toggle.classList.remove('expanded');
+                } else {
+                    container.classList.add('expanded');
+                    toggle.classList.add('expanded');
+                }
+            };
+
+            // NEW: Generate customer measurements display
+            function generateCustomerMeasurementsDisplay(measurements) {
+                return measurements.map(measurement => `
+                    <div class="measurement-card">
+                        <div class="measurement-info">
+                            <strong><i class="fas fa-tshirt"></i> ${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
+                            <span><i class="fas fa-calendar"></i> Delivery: ${measurement.delivery_date}</span>
+                            ${measurement.additional_notes ? `<span><i class="fas fa-sticky-note"></i> Notes: ${measurement.additional_notes}</span>` : ''}
+                        </div>
+                        <div class="measurement-actions">
+                            <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-edit">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-delete">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
             }
 
             // Load customers function

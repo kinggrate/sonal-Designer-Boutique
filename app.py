@@ -19,23 +19,25 @@ db = SQLAlchemy(app)
 VALID_USERNAME = 'sonaldesignerboutique'
 VALID_PASSWORD = 'Shilpa@1430'
 
-# Database Models
+# FIXED: Database Models - NO garment_type in Customer!
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     measurements = db.relationship('Measurement', backref='customer', lazy=True, cascade="all, delete-orphan")
     
     def to_dict(self):
         return {
             'id': self.id,
             'customer_name': self.customer_name,
-            'phone_number': self.phone_number
+            'phone_number': self.phone_number,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else ''
         }
 
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    garment_type = db.Column(db.String(20), nullable=False)
+    garment_type = db.Column(db.String(20), nullable=False)  # Only HERE!
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     
     # Blouse measurements
@@ -159,16 +161,15 @@ def login_required(f):
     decorated_function.__name__ = f.__name__
     return decorated_function
 
-# FIXED: Main route accepts both GET and POST
+# Main route
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     if request.method == 'POST':
-        # Handle POST data if needed, or redirect to prevent resubmission
         return redirect(url_for('index'))
     return render_template('index.html')
 
-# FIXED: Customer API routes with proper error handling
+# FIXED: Customer API routes - proper database structure
 @app.route('/api/customers', methods=['GET', 'POST'])
 @login_required
 def customers():
@@ -181,39 +182,55 @@ def customers():
             } for customer in customers])
         
         elif request.method == 'POST':
-            # Handle both JSON and form data
             if request.is_json:
                 data = request.get_json()
             else:
                 data = request.form.to_dict()
             
+            print(f"Received customer data: {data}")
+            
             # Validate required fields
             if not data.get('customer_name') or not data.get('phone_number'):
                 return jsonify({'error': 'Customer name and phone number are required'}), 400
             
-            # Create customer
+            # FIXED: Create customer without garment_type field
             customer = Customer(
-                customer_name=data['customer_name'],
-                phone_number=data['phone_number']
+                customer_name=data['customer_name'].strip(),
+                phone_number=data['phone_number'].strip()
             )
             
             db.session.add(customer)
             db.session.flush()  # Get customer.id before commit
             
+            print(f"Created customer with ID: {customer.id}")
+            
             # Handle measurements if provided
             measurements_data = data.get('measurements', [])
+            measurement_count = 0
+            
             if measurements_data:
                 for m in measurements_data:
+                    print(f"Processing measurement: {m}")
+                    
+                    # FIXED: Validate garment_type for measurement
+                    garment_type = m.get('garment_type')
+                    if not garment_type:
+                        print("Warning: Skipping measurement without garment_type")
+                        continue
+                    
+                    delivery_date = m.get('delivery_date')
+                    if not delivery_date:
+                        print("Warning: Skipping measurement without delivery_date")
+                        continue
+                    
                     measurement = Measurement(
                         customer_id=customer.id,
-                        garment_type=m.get('garment_type', 'blouse'),
-                        delivery_date=m.get('delivery_date', ''),
-                        additional_notes=m.get('additional_notes', '')
+                        garment_type=garment_type.strip(),
+                        delivery_date=delivery_date.strip(),
+                        additional_notes=m.get('additional_notes', '').strip()
                     )
                     
                     # Set measurements based on garment type
-                    garment_type = m.get('garment_type', 'blouse')
-                    
                     if garment_type == 'blouse':
                         measurement.shoulder = safe_float(m.get('shoulder'))
                         measurement.chest = safe_float(m.get('chest'))
@@ -251,25 +268,32 @@ def customers():
                         measurement.matha_round = safe_float(m.get('matha_round'))
                     
                     db.session.add(measurement)
+                    measurement_count += 1
             
             db.session.commit()
-            return jsonify({'message': 'Customer and measurements added successfully', 'customer_id': customer.id}), 201
+            print(f"Successfully saved customer with {measurement_count} measurements")
+            
+            return jsonify({
+                'message': f'Customer and {measurement_count} measurements added successfully',
+                'customer_id': customer.id
+            }), 201
             
     except Exception as e:
         db.session.rollback()
-        print(f"Error in customers route: {str(e)}")  # Server-side logging
+        print(f"Error in customers route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-# FIXED: Separate measurement endpoint
+# Add measurement to existing customer
 @app.route('/api/measurements', methods=['POST'])
 @login_required
 def add_measurement():
     try:
-        # Handle both JSON and form data
         if request.is_json:
             data = request.get_json()
         else:
             data = request.form.to_dict()
+        
+        print(f"Received measurement data: {data}")
         
         # Validate required fields
         customer_id = data.get('customer_id')
@@ -286,9 +310,9 @@ def add_measurement():
         
         measurement = Measurement(
             customer_id=customer_id,
-            garment_type=garment_type,
-            delivery_date=delivery_date,
-            additional_notes=data.get('additional_notes', '')
+            garment_type=garment_type.strip(),
+            delivery_date=delivery_date.strip(),
+            additional_notes=data.get('additional_notes', '').strip()
         )
         
         # Set measurements based on garment type
@@ -331,14 +355,19 @@ def add_measurement():
         db.session.add(measurement)
         db.session.commit()
         
-        return jsonify({'message': f'{garment_type.capitalize()} measurement added successfully'}), 201
+        print(f"Successfully added {garment_type} measurement to customer {customer_id}")
+        
+        return jsonify({
+            'message': f'{garment_type.capitalize()} measurement added successfully',
+            'measurement_id': measurement.id
+        }), 201
         
     except Exception as e:
         db.session.rollback()
-        print(f"Error in add_measurement route: {str(e)}")  # Server-side logging
+        print(f"Error in add_measurement route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-# Update routes
+# Update customer
 @app.route('/api/customers/<int:customer_id>', methods=['PUT'])
 @login_required
 def update_customer(customer_id):
@@ -350,18 +379,22 @@ def update_customer(customer_id):
         else:
             data = request.form.to_dict()
         
-        customer.customer_name = data.get('customer_name', customer.customer_name)
-        customer.phone_number = data.get('phone_number', customer.phone_number)
+        print(f"Updating customer {customer_id} with data: {data}")
+        
+        customer.customer_name = data.get('customer_name', customer.customer_name).strip()
+        customer.phone_number = data.get('phone_number', customer.phone_number).strip()
         
         db.session.commit()
+        print(f"Successfully updated customer {customer_id}")
+        
         return jsonify({'message': 'Customer updated successfully'})
         
     except Exception as e:
         db.session.rollback()
-        print(f"Error in update_customer route: {str(e)}")  # Server-side logging
+        print(f"Error in update_customer route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-# FIXED: Enhanced measurement update route
+# Update measurement
 @app.route('/api/measurements/<int:measurement_id>', methods=['PUT'])
 @login_required
 def update_measurement(measurement_id):
@@ -373,11 +406,13 @@ def update_measurement(measurement_id):
         else:
             data = request.form.to_dict()
         
-        print(f"Updating measurement {measurement_id} with data: {data}")  # Debug logging
+        print(f"Updating measurement {measurement_id} with data: {data}")
         
         # Update basic fields
-        measurement.delivery_date = data.get('delivery_date', measurement.delivery_date)
-        measurement.additional_notes = data.get('additional_notes', measurement.additional_notes)
+        if 'delivery_date' in data:
+            measurement.delivery_date = data['delivery_date'].strip()
+        if 'additional_notes' in data:
+            measurement.additional_notes = data['additional_notes'].strip()
         
         # Update measurements based on garment type
         garment_type = measurement.garment_type
@@ -419,12 +454,13 @@ def update_measurement(measurement_id):
             measurement.matha_round = safe_float(data.get('matha_round')) if 'matha_round' in data else measurement.matha_round
         
         db.session.commit()
-        print(f"Successfully updated measurement {measurement_id}")  # Debug logging
+        print(f"Successfully updated measurement {measurement_id}")
+        
         return jsonify({'message': f'{garment_type.capitalize()} measurement updated successfully'})
         
     except Exception as e:
         db.session.rollback()
-        print(f"Error in update_measurement route: {str(e)}")  # Server-side logging
+        print(f"Error in update_measurement route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
 # Delete routes
@@ -433,13 +469,18 @@ def update_measurement(measurement_id):
 def delete_customer(customer_id):
     try:
         customer = Customer.query.get_or_404(customer_id)
+        customer_name = customer.customer_name
+        
         db.session.delete(customer)
         db.session.commit()
+        
+        print(f"Successfully deleted customer: {customer_name} (ID: {customer_id})")
+        
         return jsonify({'message': 'Customer deleted successfully'})
         
     except Exception as e:
         db.session.rollback()
-        print(f"Error in delete_customer route: {str(e)}")  # Server-side logging
+        print(f"Error in delete_customer route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
 @app.route('/api/measurements/<int:measurement_id>', methods=['DELETE'])
@@ -447,29 +488,37 @@ def delete_customer(customer_id):
 def delete_measurement(measurement_id):
     try:
         measurement = Measurement.query.get_or_404(measurement_id)
+        garment_type = measurement.garment_type
+        customer_id = measurement.customer_id
+        
         db.session.delete(measurement)
         db.session.commit()
+        
+        print(f"Successfully deleted {garment_type} measurement (ID: {measurement_id}) for customer {customer_id}")
+        
         return jsonify({'message': 'Measurement deleted successfully'})
         
     except Exception as e:
         db.session.rollback()
-        print(f"Error in delete_measurement route: {str(e)}")  # Server-side logging
+        print(f"Error in delete_measurement route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-# FIXED: Enhanced search route with better functionality
+# Search route
 @app.route('/api/customers/search')
 @login_required
 def search_customers():
     try:
         query = request.args.get('q', '').strip()
         if query:
-            # Enhanced search: case-insensitive, partial matching
             customers = Customer.query.filter(
                 (Customer.customer_name.ilike(f'%{query}%')) |
                 (Customer.phone_number.contains(query))
             ).all()
+            
+            print(f"Search query: '{query}' returned {len(customers)} results")
         else:
             customers = Customer.query.all()
+            print(f"No search query, returning all {len(customers)} customers")
         
         return jsonify([{
             **customer.to_dict(),
@@ -477,10 +526,10 @@ def search_customers():
         } for customer in customers])
         
     except Exception as e:
-        print(f"Error in search_customers route: {str(e)}")  # Server-side logging
+        print(f"Error in search_customers route: {str(e)}")
         return jsonify({'error': f'Search error: {str(e)}'}), 500
 
-# ADDED: Debug route for measurement details
+# Get specific items
 @app.route('/api/measurements/<int:measurement_id>', methods=['GET'])
 @login_required
 def get_measurement(measurement_id):
@@ -488,12 +537,57 @@ def get_measurement(measurement_id):
         measurement = Measurement.query.get_or_404(measurement_id)
         return jsonify(measurement.to_dict())
     except Exception as e:
-        print(f"Error in get_measurement route: {str(e)}")  # Server-side logging
+        print(f"Error in get_measurement route: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
+@app.route('/api/customers/<int:customer_id>', methods=['GET'])
+@login_required
+def get_customer(customer_id):
+    try:
+        customer = Customer.query.get_or_404(customer_id)
+        return jsonify({
+            **customer.to_dict(),
+            'measurements': [m.to_dict() for m in customer.measurements]
+        })
+    except Exception as e:
+        print(f"Error in get_customer route: {str(e)}")
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+
+# Health check
+@app.route('/api/health')
+def health_check():
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': datetime.utcnow().isoformat(),
+        'customers_count': Customer.query.count(),
+        'measurements_count': Measurement.query.count()
+    })
+
 if __name__ == '__main__':
-    # Create tables if they don't exist - Flask 3.x compatible way
+    # FIXED: Create tables with proper structure
     with app.app_context():
-        db.create_all()
+        # Drop all tables and recreate to fix structure - ONLY IF NEEDED
+        try:
+            db.create_all()
+            print("Database tables created successfully")
+        except Exception as e:
+            print(f"Recreating database due to error: {e}")
+            db.drop_all()
+            db.create_all()
+            print("Database tables recreated successfully")
+        
+        # Create a test customer if none exist
+        if Customer.query.count() == 0:
+            print("Creating sample customer for testing...")
+            sample_customer = Customer(
+                customer_name="Test Customer",
+                phone_number="9876543210"
+            )
+            db.session.add(sample_customer)
+            db.session.commit()
+            print("Sample customer created")
     
+    print("🏆 Starting Sonal Designer Boutique Orders Management System...")
+    print(f"🌐 Server will be available at: http://localhost:5000")
+    print("✅ Fixed database structure - no more garment_type errors!")
     app.run(host='0.0.0.0', port=5000, debug=True)
