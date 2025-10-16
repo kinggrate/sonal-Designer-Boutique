@@ -13,7 +13,8 @@
         <!-- Header -->
         <header class="header">
             <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/WhatsApp-Image-2025-07-06-at-18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo">
+                <!-- FIXED: Correct logo path -->
+                <img src="{{ url_for('static', filename='images/WhatsApp-Image-2025-07-06-at-18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo" onerror="this.style.display='none';">
                 <div>
                     <h1 class="main-title">Sonal Designer Boutique</h1>
                     <p class="subtitle">Fashion Designing Training Institute</p>
@@ -151,6 +152,16 @@
                             <input type="tel" id="editPhoneNumber" name="phone_number" required>
                         </div>
                     </div>
+                    
+                    <!-- ADDED: Customer's Existing Measurements -->
+                    <div class="customer-measurements-section">
+                        <h3><i class="fas fa-ruler-combined"></i> Customer's Measurements</h3>
+                        <div id="customerMeasurementsList"></div>
+                        <button type="button" class="btn btn-add" id="addNewMeasurementBtn">
+                            <i class="fas fa-plus"></i> Add New Measurement
+                        </button>
+                    </div>
+                    
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" id="cancelEditBtn">
                             <i class="fas fa-times"></i> Cancel
@@ -191,6 +202,59 @@
                         </button>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Update Measurement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Measurement to Existing Customer Modal -->
+        <div id="addMeasurementToCustomerModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-plus"></i> Add Measurement to <span id="customerNameSpan"></span></h2>
+                    <span class="close" id="addMeasurementToCustomerCloseBtn">&times;</span>
+                </div>
+                <form id="addMeasurementToCustomerForm">
+                    <!-- Garment Type Selection -->
+                    <div class="form-group">
+                        <label><i class="fas fa-tshirt"></i> Select Garment Type</label>
+                        <div class="garment-type-radios">
+                            <label>
+                                <input type="radio" name="new_garment_type" value="blouse">
+                                <i class="fas fa-female"></i> Blouse
+                            </label>
+                            <label>
+                                <input type="radio" name="new_garment_type" value="pant">
+                                <i class="fas fa-male"></i> Pant
+                            </label>
+                            <label>
+                                <input type="radio" name="new_garment_type" value="dress">
+                                <i class="fas fa-dress"></i> Dress
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newMeasurementDeliveryDate"><i class="fas fa-calendar"></i> Delivery Date</label>
+                            <input type="date" id="newMeasurementDeliveryDate" name="delivery_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newMeasurementNotes"><i class="fas fa-sticky-note"></i> Additional Notes</label>
+                            <textarea id="newMeasurementNotes" name="additional_notes" rows="2"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Fields for New Measurement -->
+                    <div id="dynamicNewMeasurementFields"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelAddMeasurementToCustomerBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Add Measurement
                         </button>
                     </div>
                 </form>
@@ -242,15 +306,27 @@
             const editMeasurementCloseBtn = document.getElementById('editMeasurementCloseBtn');
             const cancelEditMeasurementBtn = document.getElementById('cancelEditMeasurementBtn');
             
+            // NEW: Add measurement to existing customer modal
+            const addMeasurementToCustomerModal = document.getElementById('addMeasurementToCustomerModal');
+            const addMeasurementToCustomerCloseBtn = document.getElementById('addMeasurementToCustomerCloseBtn');
+            const cancelAddMeasurementToCustomerBtn = document.getElementById('cancelAddMeasurementToCustomerBtn');
+            const addNewMeasurementBtn = document.getElementById('addNewMeasurementBtn');
+            
             // Forms
             const customerForm = document.getElementById('customerForm');
             const measurementForm = document.getElementById('measurementForm');
             const editCustomerForm = document.getElementById('editCustomerForm');
             const editMeasurementForm = document.getElementById('editMeasurementForm');
+            const addMeasurementToCustomerForm = document.getElementById('addMeasurementToCustomerForm');
             const dynamicFields = document.getElementById('dynamicMeasurementFields');
             const dynamicEditFields = document.getElementById('dynamicEditFields');
+            const dynamicNewMeasurementFields = document.getElementById('dynamicNewMeasurementFields');
             const measurementsList = document.getElementById('measurementsList');
             const measurementCount = document.getElementById('measurementCount');
+            const customerMeasurementsList = document.getElementById('customerMeasurementsList');
+            
+            // Cancel button
+            const cancelBtn = document.getElementById('cancelBtn');
             
             // Search
             const searchInput = document.getElementById('searchInput');
@@ -260,6 +336,16 @@
             let editingCustomerId = null;
             let editingMeasurementId = null;
             let allCustomers = []; // Store all customers for search
+
+            // FIXED: Cancel button event handler
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    customerModal.style.display = 'none';
+                    currentMeasurements = [];
+                    customerForm.reset();
+                    updateMeasurementsList();
+                });
+            }
 
             // FIXED: Search functionality with debounce
             let searchTimeout;
@@ -337,6 +423,14 @@
             }
             if (cancelEditMeasurementBtn) {
                 cancelEditMeasurementBtn.addEventListener('click', () => editMeasurementModal.style.display = 'none');
+            }
+            
+            // NEW: Close add measurement to customer modal
+            if (addMeasurementToCustomerCloseBtn) {
+                addMeasurementToCustomerCloseBtn.addEventListener('click', () => addMeasurementToCustomerModal.style.display = 'none');
+            }
+            if (cancelAddMeasurementToCustomerBtn) {
+                cancelAddMeasurementToCustomerBtn.addEventListener('click', () => addMeasurementToCustomerModal.style.display = 'none');
             }
 
             // Measurement fields templates
@@ -481,10 +575,17 @@
                     </div>`
             };
 
-            // Handle garment type selection
+            // Handle garment type selection for all modals
             document.addEventListener('change', function(e) {
                 if (e.target.name === 'garment_type') {
                     const container = e.target.closest('.modal').querySelector('#dynamicMeasurementFields, #dynamicEditFields');
+                    if (container) {
+                        container.innerHTML = garmentFields[e.target.value];
+                    }
+                }
+                
+                if (e.target.name === 'new_garment_type') {
+                    const container = e.target.closest('.modal').querySelector('#dynamicNewMeasurementFields');
                     if (container) {
                         container.innerHTML = garmentFields[e.target.value];
                     }
@@ -616,7 +717,7 @@
                 });
             });
 
-            // ADDED: Edit customer functionality
+            // ENHANCED: Edit customer functionality with measurements
             window.editCustomer = function(customerId) {
                 editingCustomerId = customerId;
                 
@@ -625,11 +726,95 @@
                 if (customer) {
                     document.getElementById('editCustomerName').value = customer.customer_name;
                     document.getElementById('editPhoneNumber').value = customer.phone_number;
+                    
+                    // Display customer's measurements
+                    customerMeasurementsList.innerHTML = customer.measurements.map(measurement => `
+                        <div class="measurement-card">
+                            <div class="measurement-info">
+                                <strong><i class="fas fa-tshirt"></i> ${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
+                                <span><i class="fas fa-calendar"></i> Delivery: ${measurement.delivery_date}</span>
+                                ${measurement.additional_notes ? `<span><i class="fas fa-sticky-note"></i> Notes: ${measurement.additional_notes}</span>` : ''}
+                            </div>
+                            <div class="measurement-actions">
+                                <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-delete">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
                     editCustomerModal.style.display = 'block';
                 } else {
                     alert('❌ Customer not found!');
                 }
             };
+
+            // NEW: Add measurement to existing customer
+            if (addNewMeasurementBtn) {
+                addNewMeasurementBtn.addEventListener('click', function() {
+                    const customer = allCustomers.find(c => c.id === editingCustomerId);
+                    if (customer) {
+                        document.getElementById('customerNameSpan').textContent = customer.customer_name;
+                        editCustomerModal.style.display = 'none';
+                        addMeasurementToCustomerModal.style.display = 'block';
+                    }
+                });
+            }
+
+            // NEW: Add measurement to customer form submission
+            addMeasurementToCustomerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedType = document.querySelector('input[name="new_garment_type"]:checked');
+                if (!selectedType) {
+                    alert('Please select a garment type!');
+                    return;
+                }
+
+                const measurementData = {
+                    customer_id: editingCustomerId,
+                    garment_type: selectedType.value,
+                    delivery_date: document.getElementById('newMeasurementDeliveryDate').value,
+                    additional_notes: document.getElementById('newMeasurementNotes').value
+                };
+
+                // Get all measurement inputs
+                const inputs = dynamicNewMeasurementFields.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.value.trim()) {
+                        measurementData[input.name] = input.value.trim();
+                    }
+                });
+
+                fetch('/api/measurements', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(measurementData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.message && data.message.includes('successfully')) {
+                        alert('✅ Measurement added successfully!');
+                        addMeasurementToCustomerModal.style.display = 'none';
+                        addMeasurementToCustomerForm.reset();
+                        dynamicNewMeasurementFields.innerHTML = '';
+                        loadCustomers();
+                        // Reopen edit customer modal
+                        setTimeout(() => editCustomer(editingCustomerId), 100);
+                    } else {
+                        alert('❌ Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('❌ Error: ' + err.message);
+                });
+            });
 
             // ADDED: Edit customer form submission
             editCustomerForm.addEventListener('submit', function(e) {
@@ -693,6 +878,7 @@
                         }
                     });
                     
+                    editCustomerModal.style.display = 'none';
                     editMeasurementModal.style.display = 'block';
                 } else {
                     alert('❌ Measurement not found!');
@@ -731,6 +917,8 @@
                         alert('✅ Measurement updated successfully!');
                         editMeasurementModal.style.display = 'none';
                         loadCustomers();
+                        // Reopen edit customer modal
+                        setTimeout(() => editCustomer(editingCustomerId), 100);
                     } else {
                         alert('❌ Error: ' + (data.error || 'Unknown error'));
                     }
@@ -773,6 +961,10 @@
                         if (data.message && data.message.includes('successfully')) {
                             alert('✅ Measurement deleted successfully!');
                             loadCustomers();
+                            // Reopen edit customer modal if it was open
+                            if (editingCustomerId) {
+                                setTimeout(() => editCustomer(editingCustomerId), 100);
+                            }
                         } else {
                             alert('❌ Error: ' + (data.error || 'Unknown error'));
                         }
