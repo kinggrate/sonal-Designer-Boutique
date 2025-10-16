@@ -7,36 +7,38 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/dev/sonal/orders.db'
+
+# Use relative path for better portability
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///orders.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'sonal_designer_boutique_secret_key_2025'
+
 db = SQLAlchemy(app)
 
 # Fixed credentials
 VALID_USERNAME = 'sonaldesignerboutique'
 VALID_PASSWORD = 'Shilpa@1430'
 
-# Database Model
+# Database Models
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
-    
     measurements = db.relationship('Measurement', backref='customer', lazy=True, cascade="all, delete-orphan")
-
+    
     def to_dict(self):
-      return {
-        'id': self.id,
-        'customer_name': self.customer_name,
-        'phone_number': self.phone_number
-    }
+        return {
+            'id': self.id,
+            'customer_name': self.customer_name,
+            'phone_number': self.phone_number
+        }
 
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     garment_type = db.Column(db.String(20), nullable=False)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
-
-    # Blouse
+    
+    # Blouse measurements
     shoulder = db.Column(db.Float)
     chest = db.Column(db.Float)
     waist = db.Column(db.Float)
@@ -50,16 +52,16 @@ class Measurement(db.Model):
     length = db.Column(db.Float)
     lower_chest = db.Column(db.Float)
     neck_round = db.Column(db.Float)
-
-    # Pant
+    
+    # Pant measurements
     pant_waist = db.Column(db.Float)
     pant_length = db.Column(db.Float)
     thigh = db.Column(db.Float)
     knee = db.Column(db.Float)
     bottom = db.Column(db.Float)
     hip = db.Column(db.Float)
-
-    # Dress
+    
+    # Dress measurements
     dress_shoulder = db.Column(db.Float)
     dress_chest = db.Column(db.Float)
     dress_waist = db.Column(db.Float)
@@ -71,60 +73,56 @@ class Measurement(db.Model):
     dress_front_neck = db.Column(db.Float)
     dress_back_neck = db.Column(db.Float)
     matha_round = db.Column(db.Float)
-
-    # Meta
+    
+    # Meta fields
     additional_notes = db.Column(db.Text)
     delivery_date = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
+    
     def to_dict(self):
-       return {
-        'id': self.id,
-        'customer_id': self.customer_id,
-        'garment_type': self.garment_type,
-        'delivery_date': self.delivery_date,
-        'additional_notes': self.additional_notes,
-        'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        return {
+            'id': self.id,
+            'customer_id': self.customer_id,
+            'garment_type': self.garment_type,
+            'delivery_date': self.delivery_date,
+            'additional_notes': self.additional_notes,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            # Blouse fields
+            'shoulder': self.shoulder,
+            'chest': self.chest,
+            'waist': self.waist,
+            'bust': self.bust,
+            'bust_point': self.bust_point,
+            'bust_to_bust': self.bust_to_bust,
+            'sleeves': self.sleeves,
+            'penalty_crease': self.penalty_crease,
+            'back_neck': self.back_neck,
+            'front_neck': self.front_neck,
+            'length': self.length,
+            'lower_chest': self.lower_chest,
+            'neck_round': self.neck_round,
+            # Pant fields
+            'pant_waist': self.pant_waist,
+            'pant_length': self.pant_length,
+            'thigh': self.thigh,
+            'knee': self.knee,
+            'bottom': self.bottom,
+            'hip': self.hip,
+            # Dress fields
+            'dress_shoulder': self.dress_shoulder,
+            'dress_chest': self.dress_chest,
+            'dress_waist': self.dress_waist,
+            'dress_hip': self.dress_hip,
+            'dress_length': self.dress_length,
+            'arm_whole_round': self.arm_whole_round,
+            'dress_sleeves': self.dress_sleeves,
+            'penalty_circle': self.penalty_circle,
+            'dress_front_neck': self.dress_front_neck,
+            'dress_back_neck': self.dress_back_neck,
+            'matha_round': self.matha_round
+        }
 
-        # Blouse
-        'shoulder': self.shoulder,
-        'chest': self.chest,
-        'waist': self.waist,
-        'bust': self.bust,
-        'bust_point': self.bust_point,
-        'bust_to_bust': self.bust_to_bust,
-        'sleeves': self.sleeves,
-        'penalty_crease': self.penalty_crease,
-        'back_neck': self.back_neck,
-        'front_neck': self.front_neck,
-        'length': self.length,
-        'lower_chest': self.lower_chest,
-        'neck_round': self.neck_round,
-
-        # Pant
-        'pant_waist': self.pant_waist,
-        'pant_length': self.pant_length,
-        'thigh': self.thigh,
-        'knee': self.knee,
-        'bottom': self.bottom,
-        'hip': self.hip,
-
-        # Dress
-        'dress_shoulder': self.dress_shoulder,
-        'dress_chest': self.dress_chest,
-        'dress_waist': self.dress_waist,
-        'dress_hip': self.dress_hip,
-        'dress_length': self.dress_length,
-        'arm_whole_round': self.arm_whole_round,
-        'dress_sleeves': self.dress_sleeves,
-        'penalty_circle': self.penalty_circle,
-        'dress_front_neck': self.dress_front_neck,
-        'dress_back_neck': self.dress_back_neck,
-        'matha_round': self.matha_round
-    }
-
-
-# Routes
+# Authentication routes
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -135,7 +133,7 @@ def login():
             session['logged_in'] = True
             return redirect(url_for('index'))
         else:
-            return render_template('login.html', error='Invalid username or password')
+            return render_template('login.html', error="Invalid username or password")
     
     return render_template('login.html')
 
@@ -152,226 +150,339 @@ def login_required(f):
     decorated_function.__name__ = f.__name__
     return decorated_function
 
+# Main routes
 @app.route('/')
 @login_required
 def index():
     return render_template('index.html')
 
+# FIXED: Customer API routes with proper error handling
 @app.route('/api/customers', methods=['GET', 'POST'])
 @login_required
 def customers():
-    if request.method == 'GET':
-        customers = Customer.query.all()
-        return jsonify([
-            {
+    try:
+        if request.method == 'GET':
+            customers = Customer.query.all()
+            return jsonify([{
                 **customer.to_dict(),
                 'measurements': [m.to_dict() for m in customer.measurements]
-            }
-            for customer in customers
-        ])
-    elif request.method == 'POST':
-        if request.is_json:
-            data = request.get_json()
-        else:
-            data = request.form
-        customer = Customer(
-            customer_name=data['customer_name'],
-            phone_number=data['phone_number']
-        )
-        db.session.add(customer)
-        db.session.flush()  # Get customer.id before commit
-
-        # Handle measurements if provided
-        measurements = data.get('measurements', [])
-        for m in measurements:
-            measurement = Measurement(
-                customer_id=customer.id,
-                garment_type=m['garment_type'],
-                delivery_date=m.get('delivery_date', ''),
-                additional_notes=m.get('additional_notes', '')
+            } for customer in customers])
+        
+        elif request.method == 'POST':
+            # Handle both JSON and form data
+            if request.is_json:
+                data = request.get_json()
+            else:
+                data = request.form.to_dict()
+            
+            # Validate required fields
+            if not data.get('customer_name') or not data.get('phone_number'):
+                return jsonify({'error': 'Customer name and phone number are required'}), 400
+            
+            # Create customer
+            customer = Customer(
+                customer_name=data['customer_name'],
+                phone_number=data['phone_number']
             )
-            # Blouse
-            measurement.shoulder = float(m.get('shoulder')) if m.get('shoulder') not in [None, ''] else None
-            measurement.chest = float(m.get('chest')) if m.get('chest') not in [None, ''] else None
-            measurement.waist = float(m.get('waist')) if m.get('waist') not in [None, ''] else None
-            measurement.bust = float(m.get('bust')) if m.get('bust') not in [None, ''] else None
-            measurement.bust_point = float(m.get('bust_point')) if m.get('bust_point') not in [None, ''] else None
-            measurement.bust_to_bust = float(m.get('bust_to_bust')) if m.get('bust_to_bust') not in [None, ''] else None
-            measurement.sleeves = float(m.get('sleeves')) if m.get('sleeves') not in [None, ''] else None
-            measurement.penalty_crease = float(m.get('penalty_crease')) if m.get('penalty_crease') not in [None, ''] else None
-            measurement.back_neck = float(m.get('back_neck')) if m.get('back_neck') not in [None, ''] else None
-            measurement.front_neck = float(m.get('front_neck')) if m.get('front_neck') not in [None, ''] else None
-            measurement.length = float(m.get('length')) if m.get('length') not in [None, ''] else None
-            measurement.lower_chest = float(m.get('lower_chest')) if m.get('lower_chest') not in [None, ''] else None
-            measurement.neck_round = float(m.get('neck_round')) if m.get('neck_round') not in [None, ''] else None
-            # Pant
-            measurement.pant_waist = float(m.get('pant_waist')) if m.get('pant_waist') not in [None, ''] else None
-            measurement.pant_length = float(m.get('pant_length')) if m.get('pant_length') not in [None, ''] else None
-            measurement.thigh = float(m.get('thigh')) if m.get('thigh') not in [None, ''] else None
-            measurement.knee = float(m.get('knee')) if m.get('knee') not in [None, ''] else None
-            measurement.bottom = float(m.get('bottom')) if m.get('bottom') not in [None, ''] else None
-            measurement.hip = float(m.get('hip')) if m.get('hip') not in [None, ''] else None
-            # Dress
-            measurement.dress_shoulder = float(m.get('dress_shoulder')) if m.get('dress_shoulder') not in [None, ''] else None
-            measurement.dress_chest = float(m.get('dress_chest')) if m.get('dress_chest') not in [None, ''] else None
-            measurement.dress_waist = float(m.get('dress_waist')) if m.get('dress_waist') not in [None, ''] else None
-            measurement.dress_hip = float(m.get('dress_hip')) if m.get('dress_hip') not in [None, ''] else None
-            measurement.dress_length = float(m.get('dress_length')) if m.get('dress_length') not in [None, ''] else None
-            measurement.arm_whole_round = float(m.get('arm_whole_round')) if m.get('arm_whole_round') not in [None, ''] else None
-            measurement.dress_sleeves = float(m.get('dress_sleeves')) if m.get('dress_sleeves') not in [None, ''] else None
-            measurement.penalty_circle = float(m.get('penalty_circle')) if m.get('penalty_circle') not in [None, ''] else None
-            measurement.dress_front_neck = float(m.get('dress_front_neck')) if m.get('dress_front_neck') not in [None, ''] else None
-            measurement.dress_back_neck = float(m.get('dress_back_neck')) if m.get('dress_back_neck') not in [None, ''] else None
-            measurement.matha_round = float(m.get('matha_round')) if m.get('matha_round') not in [None, ''] else None
-            db.session.add(measurement)
-        db.session.commit()
-        return jsonify({'message': 'Customer and measurements added', 'customer_id': customer.id}), 201
+            
+            db.session.add(customer)
+            db.session.flush()  # Get customer.id before commit
+            
+            # Handle measurements if provided
+            measurements_data = data.get('measurements', [])
+            if measurements_data:
+                for m in measurements_data:
+                    measurement = Measurement(
+                        customer_id=customer.id,
+                        garment_type=m.get('garment_type', 'blouse'),
+                        delivery_date=m.get('delivery_date', ''),
+                        additional_notes=m.get('additional_notes', '')
+                    )
+                    
+                    # Helper function to safely convert to float
+                    def safe_float(value):
+                        if value in [None, '']:
+                            return None
+                        try:
+                            return float(value)
+                        except (ValueError, TypeError):
+                            return None
+                    
+                    # Set measurements based on garment type
+                    garment_type = m.get('garment_type', 'blouse')
+                    
+                    if garment_type == 'blouse':
+                        measurement.shoulder = safe_float(m.get('shoulder'))
+                        measurement.chest = safe_float(m.get('chest'))
+                        measurement.waist = safe_float(m.get('waist'))
+                        measurement.bust = safe_float(m.get('bust'))
+                        measurement.bust_point = safe_float(m.get('bust_point'))
+                        measurement.bust_to_bust = safe_float(m.get('bust_to_bust'))
+                        measurement.sleeves = safe_float(m.get('sleeves'))
+                        measurement.penalty_crease = safe_float(m.get('penalty_crease'))
+                        measurement.back_neck = safe_float(m.get('back_neck'))
+                        measurement.front_neck = safe_float(m.get('front_neck'))
+                        measurement.length = safe_float(m.get('length'))
+                        measurement.lower_chest = safe_float(m.get('lower_chest'))
+                        measurement.neck_round = safe_float(m.get('neck_round'))
+                        
+                    elif garment_type == 'pant':
+                        measurement.pant_waist = safe_float(m.get('pant_waist'))
+                        measurement.pant_length = safe_float(m.get('pant_length'))
+                        measurement.thigh = safe_float(m.get('thigh'))
+                        measurement.knee = safe_float(m.get('knee'))
+                        measurement.bottom = safe_float(m.get('bottom'))
+                        measurement.hip = safe_float(m.get('hip'))
+                        
+                    elif garment_type == 'dress':
+                        measurement.dress_shoulder = safe_float(m.get('dress_shoulder'))
+                        measurement.dress_chest = safe_float(m.get('dress_chest'))
+                        measurement.dress_waist = safe_float(m.get('dress_waist'))
+                        measurement.dress_hip = safe_float(m.get('dress_hip'))
+                        measurement.dress_length = safe_float(m.get('dress_length'))
+                        measurement.arm_whole_round = safe_float(m.get('arm_whole_round'))
+                        measurement.dress_sleeves = safe_float(m.get('dress_sleeves'))
+                        measurement.penalty_circle = safe_float(m.get('penalty_circle'))
+                        measurement.dress_front_neck = safe_float(m.get('dress_front_neck'))
+                        measurement.dress_back_neck = safe_float(m.get('dress_back_neck'))
+                        measurement.matha_round = safe_float(m.get('matha_round'))
+                    
+                    db.session.add(measurement)
+            
+            db.session.commit()
+            return jsonify({'message': 'Customer and measurements added successfully', 'customer_id': customer.id}), 201
+            
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
 
+# FIXED: Separate measurement endpoint
 @app.route('/api/measurements', methods=['POST'])
 @login_required
 def add_measurement():
-    data = request.form  # or request.get_json()
-    garment_type = data['garment_type']
+    try:
+        # Handle both JSON and form data
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
+        
+        # Validate required fields
+        customer_id = data.get('customer_id')
+        garment_type = data.get('garment_type')
+        delivery_date = data.get('delivery_date')
+        
+        if not customer_id or not garment_type or not delivery_date:
+            return jsonify({'error': 'customer_id, garment_type, and delivery_date are required'}), 400
+        
+        # Check if customer exists
+        customer = Customer.query.get(customer_id)
+        if not customer:
+            return jsonify({'error': 'Customer not found'}), 404
+        
+        measurement = Measurement(
+            customer_id=customer_id,
+            garment_type=garment_type,
+            delivery_date=delivery_date,
+            additional_notes=data.get('additional_notes', '')
+        )
+        
+        # Helper function to safely convert to float
+        def safe_float(value):
+            if value in [None, '']:
+                return None
+            try:
+                return float(value)
+            except (ValueError, TypeError):
+                return None
+        
+        # Set measurements based on garment type
+        if garment_type == 'blouse':
+            measurement.shoulder = safe_float(data.get('shoulder'))
+            measurement.chest = safe_float(data.get('chest'))
+            measurement.waist = safe_float(data.get('waist'))
+            measurement.bust = safe_float(data.get('bust'))
+            measurement.bust_point = safe_float(data.get('bust_point'))
+            measurement.bust_to_bust = safe_float(data.get('bust_to_bust'))
+            measurement.sleeves = safe_float(data.get('sleeves'))
+            measurement.penalty_crease = safe_float(data.get('penalty_crease'))
+            measurement.back_neck = safe_float(data.get('back_neck'))
+            measurement.front_neck = safe_float(data.get('front_neck'))
+            measurement.length = safe_float(data.get('length'))
+            measurement.lower_chest = safe_float(data.get('lower_chest'))
+            measurement.neck_round = safe_float(data.get('neck_round'))
+            
+        elif garment_type == 'pant':
+            measurement.pant_waist = safe_float(data.get('pant_waist'))
+            measurement.pant_length = safe_float(data.get('pant_length'))
+            measurement.thigh = safe_float(data.get('thigh'))
+            measurement.knee = safe_float(data.get('knee'))
+            measurement.bottom = safe_float(data.get('bottom'))
+            measurement.hip = safe_float(data.get('hip'))
+            
+        elif garment_type == 'dress':
+            measurement.dress_shoulder = safe_float(data.get('dress_shoulder'))
+            measurement.dress_chest = safe_float(data.get('dress_chest'))
+            measurement.dress_waist = safe_float(data.get('dress_waist'))
+            measurement.dress_hip = safe_float(data.get('dress_hip'))
+            measurement.dress_length = safe_float(data.get('dress_length'))
+            measurement.arm_whole_round = safe_float(data.get('arm_whole_round'))
+            measurement.dress_sleeves = safe_float(data.get('dress_sleeves'))
+            measurement.penalty_circle = safe_float(data.get('penalty_circle'))
+            measurement.dress_front_neck = safe_float(data.get('dress_front_neck'))
+            measurement.dress_back_neck = safe_float(data.get('dress_back_neck'))
+            measurement.matha_round = safe_float(data.get('matha_round'))
+        
+        db.session.add(measurement)
+        db.session.commit()
+        
+        return jsonify({'message': f'{garment_type.capitalize()} measurement added successfully'}), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-    measurement = Measurement(
-        customer_id=data['customer_id'],
-        garment_type=garment_type,
-        delivery_date=data['delivery_date'],
-        additional_notes=data.get('additional_notes')
-    )
-
-    if garment_type == 'blouse':
-        measurement.shoulder = data.get('shoulder')
-        measurement.chest = data.get('chest')
-        measurement.waist = data.get('waist')
-        measurement.bust = data.get('bust')
-        measurement.bust_point = data.get('bust_point')
-        measurement.bust_to_bust = data.get('bust_to_bust')
-        measurement.sleeves = data.get('sleeves')
-        measurement.penalty_crease = data.get('penalty_crease')
-        measurement.back_neck = data.get('back_neck')
-        measurement.front_neck = data.get('front_neck')
-        measurement.length = data.get('length')
-        measurement.lower_chest = data.get('lower_chest')
-        measurement.neck_round = data.get('neck_round')
-
-    elif garment_type == 'pant':
-        measurement.pant_waist = data.get('pant_waist')
-        measurement.pant_length = data.get('pant_length')
-        measurement.thigh = data.get('thigh')
-        measurement.knee = data.get('knee')
-        measurement.bottom = data.get('bottom')
-        measurement.hip = data.get('hip')
-
-    elif garment_type == 'dress':
-        measurement.dress_shoulder = data.get('dress_shoulder')
-        measurement.dress_chest = data.get('dress_chest')
-        measurement.dress_waist = data.get('dress_waist')
-        measurement.dress_hip = data.get('dress_hip')
-        measurement.dress_length = data.get('dress_length')
-        measurement.arm_whole_round = data.get('arm_whole_round')
-        measurement.dress_sleeves = data.get('dress_sleeves')
-        measurement.penalty_circle = data.get('penalty_circle')
-        measurement.dress_front_neck = data.get('dress_front_neck')
-        measurement.dress_back_neck = data.get('dress_back_neck')
-        measurement.matha_round = data.get('matha_round')
-
-    db.session.add(measurement)
-    db.session.commit()
-    return jsonify({'message': f'{garment_type.capitalize()} measurement added'}), 201
-
-
+# Update routes
 @app.route('/api/customers/<int:customer_id>', methods=['PUT'])
 @login_required
 def update_customer(customer_id):
-    customer = Customer.query.get_or_404(customer_id)
-    data = request.json
-
-    if data['customer_name'] != customer.customer_name:
-        existing_customer = Customer.query.filter_by(customer_name=data['customer_name']).first()
-        if existing_customer:
-            return jsonify({'error': 'Customer with this name already exists'}), 400
-
-    customer.customer_name = data['customer_name']
-    customer.phone_number = data['phone_number']
-    db.session.commit()
-    return jsonify({'message': 'Customer updated successfully'})
+    try:
+        customer = Customer.query.get_or_404(customer_id)
+        data = request.get_json()
+        
+        customer.customer_name = data.get('customer_name', customer.customer_name)
+        customer.phone_number = data.get('phone_number', customer.phone_number)
+        
+        db.session.commit()
+        return jsonify({'message': 'Customer updated successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
 
 @app.route('/api/measurements/<int:measurement_id>', methods=['PUT'])
 @login_required
 def update_measurement(measurement_id):
-    measurement = Measurement.query.get_or_404(measurement_id)
-    data = request.json
-    garment_type = measurement.garment_type
+    try:
+        measurement = Measurement.query.get_or_404(measurement_id)
+        data = request.get_json()
+        
+        # Update basic fields
+        measurement.delivery_date = data.get('delivery_date', measurement.delivery_date)
+        measurement.additional_notes = data.get('additional_notes', measurement.additional_notes)
+        
+        # Helper function to safely convert to float
+        def safe_float(value):
+            if value in [None, '']:
+                return None
+            try:
+                return float(value)
+            except (ValueError, TypeError):
+                return None
+        
+        # Update measurements based on garment type
+        garment_type = measurement.garment_type
+        
+        if garment_type == 'blouse':
+            measurement.shoulder = safe_float(data.get('shoulder'))
+            measurement.chest = safe_float(data.get('chest'))
+            measurement.waist = safe_float(data.get('waist'))
+            measurement.bust = safe_float(data.get('bust'))
+            measurement.bust_point = safe_float(data.get('bust_point'))
+            measurement.bust_to_bust = safe_float(data.get('bust_to_bust'))
+            measurement.sleeves = safe_float(data.get('sleeves'))
+            measurement.penalty_crease = safe_float(data.get('penalty_crease'))
+            measurement.back_neck = safe_float(data.get('back_neck'))
+            measurement.front_neck = safe_float(data.get('front_neck'))
+            measurement.length = safe_float(data.get('length'))
+            measurement.lower_chest = safe_float(data.get('lower_chest'))
+            measurement.neck_round = safe_float(data.get('neck_round'))
+            
+        elif garment_type == 'pant':
+            measurement.pant_waist = safe_float(data.get('pant_waist'))
+            measurement.pant_length = safe_float(data.get('pant_length'))
+            measurement.thigh = safe_float(data.get('thigh'))
+            measurement.knee = safe_float(data.get('knee'))
+            measurement.bottom = safe_float(data.get('bottom'))
+            measurement.hip = safe_float(data.get('hip'))
+            
+        elif garment_type == 'dress':
+            measurement.dress_shoulder = safe_float(data.get('dress_shoulder'))
+            measurement.dress_chest = safe_float(data.get('dress_chest'))
+            measurement.dress_waist = safe_float(data.get('dress_waist'))
+            measurement.dress_hip = safe_float(data.get('dress_hip'))
+            measurement.dress_length = safe_float(data.get('dress_length'))
+            measurement.arm_whole_round = safe_float(data.get('arm_whole_round'))
+            measurement.dress_sleeves = safe_float(data.get('dress_sleeves'))
+            measurement.penalty_circle = safe_float(data.get('penalty_circle'))
+            measurement.dress_front_neck = safe_float(data.get('dress_front_neck'))
+            measurement.dress_back_neck = safe_float(data.get('dress_back_neck'))
+            measurement.matha_round = safe_float(data.get('matha_round'))
+        
+        db.session.commit()
+        return jsonify({'message': f'{garment_type.capitalize()} measurement updated successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-    measurement.delivery_date = data['delivery_date']
-    measurement.additional_notes = data.get('additional_notes')
-
-    if garment_type == 'blouse':
-        measurement.shoulder = data.get('shoulder')
-        measurement.chest = data.get('chest')
-        measurement.waist = data.get('waist')
-        measurement.bust = data.get('bust')
-        measurement.bust_point = data.get('bust_point')
-        measurement.bust_to_bust = data.get('bust_to_bust')
-        measurement.sleeves = data.get('sleeves')
-        measurement.penalty_crease = data.get('penalty_crease')
-        measurement.back_neck = data.get('back_neck')
-        measurement.front_neck = data.get('front_neck')
-        measurement.length = data.get('length')
-        measurement.lower_chest = data.get('lower_chest')
-        measurement.neck_round = data.get('neck_round')
-
-    elif garment_type == 'pant':
-        measurement.pant_waist = data.get('pant_waist')
-        measurement.pant_length = data.get('pant_length')
-        measurement.thigh = data.get('thigh')
-        measurement.knee = data.get('knee')
-        measurement.bottom = data.get('bottom')
-        measurement.hip = data.get('hip')
-
-    elif garment_type == 'dress':
-        measurement.dress_shoulder = data.get('dress_shoulder')
-        measurement.dress_chest = data.get('dress_chest')
-        measurement.dress_waist = data.get('dress_waist')
-        measurement.dress_hip = data.get('dress_hip')
-        measurement.dress_length = data.get('dress_length')
-        measurement.arm_whole_round = data.get('arm_whole_round')
-        measurement.dress_sleeves = data.get('dress_sleeves')
-        measurement.penalty_circle = data.get('penalty_circle')
-        measurement.dress_front_neck = data.get('dress_front_neck')
-        measurement.dress_back_neck = data.get('dress_back_neck')
-        measurement.matha_round = data.get('matha_round')
-
-    db.session.commit()
-    return jsonify({'message': f'{garment_type.capitalize()} measurement updated'})
-
+# Delete routes
 @app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
 @login_required
 def delete_customer(customer_id):
-    customer = Customer.query.get_or_404(customer_id)
-    db.session.delete(customer)
-    db.session.commit()
-    return jsonify({'message': 'Customer deleted successfully'})
+    try:
+        customer = Customer.query.get_or_404(customer_id)
+        db.session.delete(customer)
+        db.session.commit()
+        return jsonify({'message': 'Customer deleted successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
 
+@app.route('/api/measurements/<int:measurement_id>', methods=['DELETE'])
+@login_required
+def delete_measurement(measurement_id):
+    try:
+        measurement = Measurement.query.get_or_404(measurement_id)
+        db.session.delete(measurement)
+        db.session.commit()
+        return jsonify({'message': 'Measurement deleted successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+
+# Search route
 @app.route('/api/customers/search')
 @login_required
 def search_customers():
-    query = request.args.get('q', '')
-    if query:
-        customers = Customer.query.filter(
-            (Customer.customer_name.contains(query)) | 
-            (Customer.phone_number.contains(query))
-        ).all()
-    else:
-        customers = Customer.query.all()
-    
-    return jsonify([customer.to_dict() for customer in customers])
+    try:
+        query = request.args.get('q', '')
+        if query:
+            customers = Customer.query.filter(
+                (Customer.customer_name.contains(query)) |
+                (Customer.phone_number.contains(query))
+            ).all()
+        else:
+            customers = Customer.query.all()
+        
+        return jsonify([{
+            **customer.to_dict(),
+            'measurements': [m.to_dict() for m in customer.measurements]
+        } for customer in customers])
+        
+    except Exception as e:
+        return jsonify({'error': f'Search error: {str(e)}'}), 500
 
-# if __name__ == '__main__':
-#     with app.app_context():
-#         db.create_all()
-#     app.run(debug=True, host='0.0.0.0', port=5000)
- # Main execution
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+# Database initialization
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
+if __name__ == '__main__':
+    # Create tables if they don't exist
+    with app.app_context():
+        db.create_all()
+    
+    app.run(host='0.0.0.0', port=5000, debug=True)
