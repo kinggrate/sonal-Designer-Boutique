@@ -122,6 +122,15 @@ class Measurement(db.Model):
             'matha_round': self.matha_round
         }
 
+# Helper function to safely convert to float
+def safe_float(value):
+    if value in [None, '']:
+        return None
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return None
+
 # Authentication routes
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -198,15 +207,6 @@ def customers():
                         delivery_date=m.get('delivery_date', ''),
                         additional_notes=m.get('additional_notes', '')
                     )
-                    
-                    # Helper function to safely convert to float
-                    def safe_float(value):
-                        if value in [None, '']:
-                            return None
-                        try:
-                            return float(value)
-                        except (ValueError, TypeError):
-                            return None
                     
                     # Set measurements based on garment type
                     garment_type = m.get('garment_type', 'blouse')
@@ -287,15 +287,6 @@ def add_measurement():
             additional_notes=data.get('additional_notes', '')
         )
         
-        # Helper function to safely convert to float
-        def safe_float(value):
-            if value in [None, '']:
-                return None
-            try:
-                return float(value)
-            except (ValueError, TypeError):
-                return None
-        
         # Set measurements based on garment type
         if garment_type == 'blouse':
             measurement.shoulder = safe_float(data.get('shoulder'))
@@ -370,15 +361,6 @@ def update_measurement(measurement_id):
         # Update basic fields
         measurement.delivery_date = data.get('delivery_date', measurement.delivery_date)
         measurement.additional_notes = data.get('additional_notes', measurement.additional_notes)
-        
-        # Helper function to safely convert to float
-        def safe_float(value):
-            if value in [None, '']:
-                return None
-            try:
-                return float(value)
-            except (ValueError, TypeError):
-                return None
         
         # Update measurements based on garment type
         garment_type = measurement.garment_type
@@ -475,13 +457,8 @@ def search_customers():
     except Exception as e:
         return jsonify({'error': f'Search error: {str(e)}'}), 500
 
-# Database initialization
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 if __name__ == '__main__':
-    # Create tables if they don't exist
+    # Create tables if they don't exist - Flask 3.x compatible way
     with app.app_context():
         db.create_all()
     
