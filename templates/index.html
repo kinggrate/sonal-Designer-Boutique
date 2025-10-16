@@ -13,9 +13,9 @@
         <!-- Header -->
         <header class="header">
             <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-07-06 at 18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo">
+                <img src="{{ url_for('static', filename='images/WhatsApp-Image-2025-07-06-at-18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo">
                 <div>
-                    <h1 class="main-title">Orders Management System</h1>
+                    <h1 class="main-title">Sonal Designer Boutique</h1>
                     <p class="subtitle">Fashion Designing Training Institute</p>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                 <!-- Add Customer Button -->
                 <div class="search-actions">
                     <button id="addNewBtn" class="btn btn-primary">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-user-plus"></i>
                         <span>Add New Customer</span>
                     </button>
                 </div>
@@ -50,25 +50,31 @@
                 <form id="customerForm" class="customer-form">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="customerName">Customer Name</label>
-                            <input type="text" id="customerName" name="customer_name" required>
+                            <label for="customerName"><i class="fas fa-user"></i> Customer Name</label>
+                            <input type="text" id="customerName" name="customer_name" required placeholder="Enter customer name">
                         </div>
                         <div class="form-group">
-                            <label for="phoneNumber">Phone Number</label>
-                            <input type="tel" id="phoneNumber" name="phone_number" required>
+                            <label for="phoneNumber"><i class="fas fa-phone"></i> Phone Number</label>
+                            <input type="tel" id="phoneNumber" name="phone_number" required placeholder="Enter phone number">
                         </div>
                     </div>
                     
                     <!-- Measurements List -->
                     <div class="measurements-section">
-                        <h3>Measurements Added: <span id="measurementCount">0</span></h3>
+                        <h3><i class="fas fa-ruler"></i> Measurements Added: <span id="measurementCount">0</span></h3>
                         <div id="measurementsList"></div>
                     </div>
                     
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="addMeasurementBtn">Add Measurements</button>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">Save Customer</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="button" class="btn btn-add" id="addMeasurementBtn">
+                            <i class="fas fa-plus"></i> Add Measurements
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i> Save Customer
+                        </button>
                     </div>
                 </form>
             </div>
@@ -78,27 +84,36 @@
         <div id="measurementModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Add Garment Measurements</h2>
+                    <h2><i class="fas fa-ruler-combined"></i> Add Garment Measurements</h2>
                     <span class="close" id="measurementCloseBtn">&times;</span>
                 </div>
                 <form id="measurementForm">
                     <!-- Garment Type Selection -->
                     <div class="form-group">
-                        <label>Select Garment Type (Choose One)</label>
+                        <label><i class="fas fa-tshirt"></i> Select Garment Type (Choose One)</label>
                         <div class="garment-type-radios">
-                            <label><input type="radio" name="garment_type" value="blouse"> Blouse</label>
-                            <label><input type="radio" name="garment_type" value="pant"> Pant</label>
-                            <label><input type="radio" name="garment_type" value="dress"> Dress</label>
+                            <label>
+                                <input type="radio" name="garment_type" value="blouse">
+                                <i class="fas fa-female"></i> Blouse
+                            </label>
+                            <label>
+                                <input type="radio" name="garment_type" value="pant">
+                                <i class="fas fa-male"></i> Pant
+                            </label>
+                            <label>
+                                <input type="radio" name="garment_type" value="dress">
+                                <i class="fas fa-dress"></i> Dress
+                            </label>
                         </div>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="measurementDeliveryDate">Delivery Date</label>
+                            <label for="measurementDeliveryDate"><i class="fas fa-calendar"></i> Delivery Date</label>
                             <input type="date" id="measurementDeliveryDate" name="delivery_date" required>
                         </div>
                         <div class="form-group">
-                            <label for="measurementNotes">Additional Notes</label>
+                            <label for="measurementNotes"><i class="fas fa-sticky-note"></i> Additional Notes</label>
                             <textarea id="measurementNotes" name="additional_notes" rows="2" placeholder="Special instructions for this garment..."></textarea>
                         </div>
                     </div>
@@ -107,8 +122,12 @@
                     <div id="dynamicMeasurementFields"></div>
                     
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="saveMeasurementBtn">Save Measurements</button>
+                        <button type="button" class="btn btn-secondary" id="cancelMeasurementBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" id="saveMeasurementBtn">
+                            <i class="fas fa-save"></i> Save Measurements
+                        </button>
                     </div>
                 </form>
             </div>
@@ -118,23 +137,27 @@
         <div id="editCustomerModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Edit Customer</h2>
+                    <h2><i class="fas fa-user-edit"></i> Edit Customer</h2>
                     <span class="close" id="editCustomerCloseBtn">&times;</span>
                 </div>
                 <form id="editCustomerForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="editCustomerName">Customer Name</label>
+                            <label for="editCustomerName"><i class="fas fa-user"></i> Customer Name</label>
                             <input type="text" id="editCustomerName" name="customer_name" required>
                         </div>
                         <div class="form-group">
-                            <label for="editPhoneNumber">Phone Number</label>
+                            <label for="editPhoneNumber"><i class="fas fa-phone"></i> Phone Number</label>
                             <input type="tel" id="editPhoneNumber" name="phone_number" required>
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Customer</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Customer
+                        </button>
                     </div>
                 </form>
             </div>
@@ -144,17 +167,17 @@
         <div id="editMeasurementModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Edit Measurement</h2>
+                    <h2><i class="fas fa-edit"></i> Edit Measurement</h2>
                     <span class="close" id="editMeasurementCloseBtn">&times;</span>
                 </div>
                 <form id="editMeasurementForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="editMeasurementDeliveryDate">Delivery Date</label>
+                            <label for="editMeasurementDeliveryDate"><i class="fas fa-calendar"></i> Delivery Date</label>
                             <input type="date" id="editMeasurementDeliveryDate" name="delivery_date" required>
                         </div>
                         <div class="form-group">
-                            <label for="editMeasurementNotes">Additional Notes</label>
+                            <label for="editMeasurementNotes"><i class="fas fa-sticky-note"></i> Additional Notes</label>
                             <textarea id="editMeasurementNotes" name="additional_notes" rows="2"></textarea>
                         </div>
                     </div>
@@ -163,8 +186,12 @@
                     <div id="dynamicEditFields"></div>
                     
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancelEditMeasurementBtn">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Measurement</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditMeasurementBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Measurement
+                        </button>
                     </div>
                 </form>
             </div>
@@ -173,12 +200,12 @@
         <!-- Customers List -->
         <section class="customers-section">
             <div class="section-header">
-                <h2>Customer Orders</h2>
+                <h2><i class="fas fa-users"></i> Customer Orders</h2>
                 <div class="header-actions">
                     <div class="customers-count">
-                        <span id="customersCount">0</span> customers
+                        <i class="fas fa-user"></i> <span id="customersCount">0</span> customers
                     </div>
-                    <a href="{{ url_for('logout') }}" class="btn btn-secondary logout-btn">
+                    <a href="{{ url_for('logout') }}" class="btn logout-btn">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </div>
@@ -232,6 +259,7 @@
             let currentMeasurements = [];
             let editingCustomerId = null;
             let editingMeasurementId = null;
+            let allCustomers = []; // Store all customers for search
 
             // FIXED: Search functionality with debounce
             let searchTimeout;
@@ -244,13 +272,16 @@
             });
 
             function searchCustomers(query) {
-                const url = query ? `/api/customers/search?q=${encodeURIComponent(query)}` : '/api/customers';
-                fetch(url)
-                    .then(res => res.json())
-                    .then(customers => {
-                        displayCustomers(customers);
-                    })
-                    .catch(err => console.error('Search error:', err));
+                if (!query) {
+                    displayCustomers(allCustomers);
+                    return;
+                }
+
+                const filteredCustomers = allCustomers.filter(customer => 
+                    customer.customer_name.toLowerCase().includes(query.toLowerCase()) ||
+                    customer.phone_number.includes(query)
+                );
+                displayCustomers(filteredCustomers);
             }
 
             // Open customer modal
@@ -312,50 +343,140 @@
             const garmentFields = {
                 blouse: `
                     <div class="garment-fields">
-                        <h3>Blouse Measurements (in inches)</h3>
+                        <h3><i class="fas fa-female"></i> Blouse Measurements (in inches)</h3>
                         <div class="form-grid">
-                            <input type="text" name="shoulder" placeholder="Shoulder">
-                            <input type="text" name="chest" placeholder="Chest">
-                            <input type="text" name="bust" placeholder="Bust">
-                            <input type="text" name="waist" placeholder="Waist">
-                            <input type="text" name="bust_point" placeholder="Bust Point">
-                            <input type="text" name="bust_to_bust" placeholder="Bust to Bust">
-                            <input type="text" name="sleeves" placeholder="Sleeves">
-                            <input type="text" name="penalty_crease" placeholder="Penalty Crease">
-                            <input type="text" name="back_neck" placeholder="Back Neck">
-                            <input type="text" name="front_neck" placeholder="Front Neck">
-                            <input type="text" name="length" placeholder="Length">
-                            <input type="text" name="lower_chest" placeholder="Lower Chest">
-                            <input type="text" name="neck_round" placeholder="Neck Round">
+                            <div class="form-group">
+                                <label>Shoulder</label>
+                                <input type="text" name="shoulder" placeholder="Shoulder measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Chest</label>
+                                <input type="text" name="chest" placeholder="Chest measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Bust</label>
+                                <input type="text" name="bust" placeholder="Bust measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Waist</label>
+                                <input type="text" name="waist" placeholder="Waist measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Bust Point</label>
+                                <input type="text" name="bust_point" placeholder="Bust point">
+                            </div>
+                            <div class="form-group">
+                                <label>Bust to Bust</label>
+                                <input type="text" name="bust_to_bust" placeholder="Bust to bust">
+                            </div>
+                            <div class="form-group">
+                                <label>Sleeves</label>
+                                <input type="text" name="sleeves" placeholder="Sleeves measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Penalty Crease</label>
+                                <input type="text" name="penalty_crease" placeholder="Penalty crease">
+                            </div>
+                            <div class="form-group">
+                                <label>Back Neck</label>
+                                <input type="text" name="back_neck" placeholder="Back neck">
+                            </div>
+                            <div class="form-group">
+                                <label>Front Neck</label>
+                                <input type="text" name="front_neck" placeholder="Front neck">
+                            </div>
+                            <div class="form-group">
+                                <label>Length</label>
+                                <input type="text" name="length" placeholder="Length measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Lower Chest</label>
+                                <input type="text" name="lower_chest" placeholder="Lower chest">
+                            </div>
+                            <div class="form-group">
+                                <label>Neck Round</label>
+                                <input type="text" name="neck_round" placeholder="Neck round">
+                            </div>
                         </div>
                     </div>`,
                 pant: `
                     <div class="garment-fields">
-                        <h3>Pant Measurements (in inches)</h3>
+                        <h3><i class="fas fa-male"></i> Pant Measurements (in inches)</h3>
                         <div class="form-grid">
-                            <input type="text" name="pant_waist" placeholder="Waist">
-                            <input type="text" name="hip" placeholder="Hip">
-                            <input type="text" name="pant_length" placeholder="Length">
-                            <input type="text" name="thigh" placeholder="Thigh">
-                            <input type="text" name="knee" placeholder="Knee">
-                            <input type="text" name="bottom" placeholder="Bottom">
+                            <div class="form-group">
+                                <label>Waist</label>
+                                <input type="text" name="pant_waist" placeholder="Waist measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Hip</label>
+                                <input type="text" name="hip" placeholder="Hip measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Length</label>
+                                <input type="text" name="pant_length" placeholder="Length measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Thigh</label>
+                                <input type="text" name="thigh" placeholder="Thigh measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Knee</label>
+                                <input type="text" name="knee" placeholder="Knee measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Bottom</label>
+                                <input type="text" name="bottom" placeholder="Bottom measurement">
+                            </div>
                         </div>
                     </div>`,
                 dress: `
                     <div class="garment-fields">
-                        <h3>Dress Measurements (in inches)</h3>
+                        <h3><i class="fas fa-dress"></i> Dress Measurements (in inches)</h3>
                         <div class="form-grid">
-                            <input type="text" name="dress_shoulder" placeholder="Shoulder">
-                            <input type="text" name="dress_chest" placeholder="Chest">
-                            <input type="text" name="dress_waist" placeholder="Waist">
-                            <input type="text" name="dress_hip" placeholder="Hip">
-                            <input type="text" name="dress_length" placeholder="Length">
-                            <input type="text" name="arm_whole_round" placeholder="Arm Whole Round">
-                            <input type="text" name="dress_sleeves" placeholder="Sleeves">
-                            <input type="text" name="penalty_circle" placeholder="Penalty Circle">
-                            <input type="text" name="dress_front_neck" placeholder="Front Neck">
-                            <input type="text" name="dress_back_neck" placeholder="Back Neck">
-                            <input type="text" name="matha_round" placeholder="Matha Round">
+                            <div class="form-group">
+                                <label>Shoulder</label>
+                                <input type="text" name="dress_shoulder" placeholder="Shoulder measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Chest</label>
+                                <input type="text" name="dress_chest" placeholder="Chest measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Waist</label>
+                                <input type="text" name="dress_waist" placeholder="Waist measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Hip</label>
+                                <input type="text" name="dress_hip" placeholder="Hip measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Length</label>
+                                <input type="text" name="dress_length" placeholder="Length measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Arm Whole Round</label>
+                                <input type="text" name="arm_whole_round" placeholder="Arm whole round">
+                            </div>
+                            <div class="form-group">
+                                <label>Sleeves</label>
+                                <input type="text" name="dress_sleeves" placeholder="Sleeves measurement">
+                            </div>
+                            <div class="form-group">
+                                <label>Penalty Circle</label>
+                                <input type="text" name="penalty_circle" placeholder="Penalty circle">
+                            </div>
+                            <div class="form-group">
+                                <label>Front Neck</label>
+                                <input type="text" name="dress_front_neck" placeholder="Front neck">
+                            </div>
+                            <div class="form-group">
+                                <label>Back Neck</label>
+                                <input type="text" name="dress_back_neck" placeholder="Back neck">
+                            </div>
+                            <div class="form-group">
+                                <label>Matha Round</label>
+                                <input type="text" name="matha_round" placeholder="Matha round">
+                            </div>
                         </div>
                     </div>`
             };
@@ -375,8 +496,10 @@
                 measurementCount.textContent = currentMeasurements.length;
                 measurementsList.innerHTML = currentMeasurements.map((m, index) => `
                     <div class="measurement-item">
-                        <span>${m.garment_type.charAt(0).toUpperCase() + m.garment_type.slice(1)} - ${m.delivery_date}</span>
-                        <button type="button" onclick="removeMeasurement(${index})" class="btn-small btn-danger">Remove</button>
+                        <span><i class="fas fa-tshirt"></i> ${m.garment_type.charAt(0).toUpperCase() + m.garment_type.slice(1)} - ${m.delivery_date}</span>
+                        <button type="button" onclick="removeMeasurement(${index})" class="btn-small btn-delete">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
                     </div>
                 `).join('');
             }
@@ -432,7 +555,7 @@
                     dynamicFields.innerHTML = '';
                     
                     // Show success message
-                    alert(`${selectedType.value.charAt(0).toUpperCase() + selectedType.value.slice(1)} measurement added! Click "Save Customer" to save everything.`);
+                    alert(`✅ ${selectedType.value.charAt(0).toUpperCase() + selectedType.value.slice(1)} measurement added! Click "Save Customer" to save everything.`);
                 });
             }
 
@@ -473,7 +596,7 @@
                     
                     // Check for success
                     if (data.message && data.message.includes('successfully')) {
-                        alert('Customer and measurements saved successfully!');
+                        alert('✅ Customer and measurements saved successfully!');
                         
                         // Close modal and reset
                         customerModal.style.display = 'none';
@@ -484,12 +607,12 @@
                         // Reload customer list
                         loadCustomers();
                     } else {
-                        alert('Error: ' + (data.error || 'Unknown error'));
+                        alert('❌ Error: ' + (data.error || 'Unknown error'));
                     }
                 })
                 .catch(err => {
                     console.error('Error:', err);
-                    alert('Error: ' + err.message);
+                    alert('❌ Error: ' + err.message);
                 });
             });
 
@@ -497,18 +620,15 @@
             window.editCustomer = function(customerId) {
                 editingCustomerId = customerId;
                 
-                // Fetch customer data
-                fetch(`/api/customers`)
-                    .then(res => res.json())
-                    .then(customers => {
-                        const customer = customers.find(c => c.id === customerId);
-                        if (customer) {
-                            document.getElementById('editCustomerName').value = customer.customer_name;
-                            document.getElementById('editPhoneNumber').value = customer.phone_number;
-                            editCustomerModal.style.display = 'block';
-                        }
-                    })
-                    .catch(err => console.error('Error fetching customer:', err));
+                // Find customer from stored data
+                const customer = allCustomers.find(c => c.id === customerId);
+                if (customer) {
+                    document.getElementById('editCustomerName').value = customer.customer_name;
+                    document.getElementById('editPhoneNumber').value = customer.phone_number;
+                    editCustomerModal.style.display = 'block';
+                } else {
+                    alert('❌ Customer not found!');
+                }
             };
 
             // ADDED: Edit customer form submission
@@ -530,55 +650,57 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.message && data.message.includes('successfully')) {
-                        alert('Customer updated successfully!');
+                        alert('✅ Customer updated successfully!');
                         editCustomerModal.style.display = 'none';
                         loadCustomers();
                     } else {
-                        alert('Error: ' + (data.error || 'Unknown error'));
+                        alert('❌ Error: ' + (data.error || 'Unknown error'));
                     }
                 })
                 .catch(err => {
                     console.error('Error:', err);
-                    alert('Error: ' + err.message);
+                    alert('❌ Error: ' + err.message);
                 });
             });
 
-            // ADDED: Edit measurement functionality
+            // FIXED: Edit measurement functionality
             window.editMeasurement = function(measurementId) {
+                console.log('Edit measurement clicked for ID:', measurementId);
                 editingMeasurementId = measurementId;
                 
-                // Fetch all customers to find the measurement
-                fetch('/api/customers')
-                    .then(res => res.json())
-                    .then(customers => {
-                        let measurement = null;
-                        for (const customer of customers) {
-                            measurement = customer.measurements.find(m => m.id === measurementId);
-                            if (measurement) break;
+                // Find the measurement from stored data
+                let measurement = null;
+                for (const customer of allCustomers) {
+                    measurement = customer.measurements.find(m => m.id === measurementId);
+                    if (measurement) break;
+                }
+                
+                if (measurement) {
+                    console.log('Found measurement:', measurement);
+                    
+                    // Fill form fields
+                    document.getElementById('editMeasurementDeliveryDate').value = measurement.delivery_date || '';
+                    document.getElementById('editMeasurementNotes').value = measurement.additional_notes || '';
+                    
+                    // Show measurement fields based on garment type
+                    dynamicEditFields.innerHTML = garmentFields[measurement.garment_type];
+                    
+                    // Fill in measurement values
+                    const inputs = dynamicEditFields.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        if (measurement[input.name] !== null && measurement[input.name] !== undefined) {
+                            input.value = measurement[input.name];
                         }
-                        
-                        if (measurement) {
-                            document.getElementById('editMeasurementDeliveryDate').value = measurement.delivery_date;
-                            document.getElementById('editMeasurementNotes').value = measurement.additional_notes || '';
-                            
-                            // Show measurement fields
-                            dynamicEditFields.innerHTML = garmentFields[measurement.garment_type];
-                            
-                            // Fill in measurement values
-                            const inputs = dynamicEditFields.querySelectorAll('input');
-                            inputs.forEach(input => {
-                                if (measurement[input.name]) {
-                                    input.value = measurement[input.name];
-                                }
-                            });
-                            
-                            editMeasurementModal.style.display = 'block';
-                        }
-                    })
-                    .catch(err => console.error('Error fetching measurement:', err));
+                    });
+                    
+                    editMeasurementModal.style.display = 'block';
+                } else {
+                    alert('❌ Measurement not found!');
+                    console.error('Measurement not found for ID:', measurementId);
+                }
             };
 
-            // ADDED: Edit measurement form submission
+            // FIXED: Edit measurement form submission
             editMeasurementForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -593,6 +715,8 @@
                     measurementData[input.name] = input.value.trim() || null;
                 });
 
+                console.log('Updating measurement:', editingMeasurementId, measurementData);
+
                 fetch(`/api/measurements/${editingMeasurementId}`, {
                     method: 'PUT',
                     headers: {
@@ -602,59 +726,60 @@
                 })
                 .then(res => res.json())
                 .then(data => {
+                    console.log('Update response:', data);
                     if (data.message && data.message.includes('successfully')) {
-                        alert('Measurement updated successfully!');
+                        alert('✅ Measurement updated successfully!');
                         editMeasurementModal.style.display = 'none';
                         loadCustomers();
                     } else {
-                        alert('Error: ' + (data.error || 'Unknown error'));
+                        alert('❌ Error: ' + (data.error || 'Unknown error'));
                     }
                 })
                 .catch(err => {
                     console.error('Error:', err);
-                    alert('Error: ' + err.message);
+                    alert('❌ Error: ' + err.message);
                 });
             });
 
             // Delete functions
             window.deleteCustomer = function(customerId) {
-                if (confirm('Are you sure you want to delete this customer and all their measurements?')) {
+                if (confirm('⚠️ Are you sure you want to delete this customer and all their measurements?')) {
                     fetch(`/api/customers/${customerId}`, {
                         method: 'DELETE'
                     })
                     .then(res => res.json())
                     .then(data => {
                         if (data.message && data.message.includes('successfully')) {
-                            alert('Customer deleted successfully!');
+                            alert('✅ Customer deleted successfully!');
                             loadCustomers();
                         } else {
-                            alert('Error: ' + (data.error || 'Unknown error'));
+                            alert('❌ Error: ' + (data.error || 'Unknown error'));
                         }
                     })
                     .catch(err => {
                         console.error('Error:', err);
-                        alert('Error: ' + err.message);
+                        alert('❌ Error: ' + err.message);
                     });
                 }
             };
 
             window.deleteMeasurement = function(measurementId) {
-                if (confirm('Are you sure you want to delete this measurement?')) {
+                if (confirm('⚠️ Are you sure you want to delete this measurement?')) {
                     fetch(`/api/measurements/${measurementId}`, {
                         method: 'DELETE'
                     })
                     .then(res => res.json())
                     .then(data => {
                         if (data.message && data.message.includes('successfully')) {
-                            alert('Measurement deleted successfully!');
+                            alert('✅ Measurement deleted successfully!');
                             loadCustomers();
                         } else {
-                            alert('Error: ' + (data.error || 'Unknown error'));
+                            alert('❌ Error: ' + (data.error || 'Unknown error'));
                         }
                     })
                     .catch(err => {
                         console.error('Error:', err);
-                        alert('Error: ' + err.message);
+                        alert('❌ Error: ' + err.message);
                     });
                 }
             };
@@ -669,31 +794,52 @@
                 }
                 
                 if (customersList) {
+                    if (customers.length === 0) {
+                        customersList.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <h3>No customers found</h3>
+                                <p>Add your first customer to get started!</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
                     customersList.innerHTML = customers.map(customer => `
                         <div class="customer-card">
                             <div class="customer-header">
-                                <h3>${customer.customer_name}</h3>
+                                <div>
+                                    <h3><i class="fas fa-user"></i> ${customer.customer_name}</h3>
+                                    <p><i class="fas fa-phone"></i> <strong>Phone:</strong> ${customer.phone_number}</p>
+                                    <p><i class="fas fa-ruler"></i> <strong>Measurements:</strong> ${customer.measurements.length}</p>
+                                </div>
                                 <div class="customer-actions">
-                                    <button onclick="editCustomer(${customer.id})" class="btn-small btn-secondary">Edit</button>
-                                    <button onclick="deleteCustomer(${customer.id})" class="btn-small btn-danger">Delete</button>
+                                    <button onclick="editCustomer(${customer.id})" class="btn-small btn-edit">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button onclick="deleteCustomer(${customer.id})" class="btn-small btn-delete">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
                                 </div>
                             </div>
-                            <p><strong>Phone:</strong> ${customer.phone_number}</p>
-                            <p><strong>Measurements:</strong> ${customer.measurements.length}</p>
                             
                             ${customer.measurements.length > 0 ? `
                                 <div class="measurements-list">
-                                    <h4>Measurements:</h4>
+                                    <h4><i class="fas fa-ruler-combined"></i> Measurements:</h4>
                                     ${customer.measurements.map(measurement => `
                                         <div class="measurement-card">
                                             <div class="measurement-info">
-                                                <strong>${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
-                                                <span>Delivery: ${measurement.delivery_date}</span>
-                                                ${measurement.additional_notes ? `<span>Notes: ${measurement.additional_notes}</span>` : ''}
+                                                <strong><i class="fas fa-tshirt"></i> ${measurement.garment_type.charAt(0).toUpperCase() + measurement.garment_type.slice(1)}</strong>
+                                                <span><i class="fas fa-calendar"></i> Delivery: ${measurement.delivery_date}</span>
+                                                ${measurement.additional_notes ? `<span><i class="fas fa-sticky-note"></i> Notes: ${measurement.additional_notes}</span>` : ''}
                                             </div>
                                             <div class="measurement-actions">
-                                                <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-secondary">Edit</button>
-                                                <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-danger">Delete</button>
+                                                <button onclick="editMeasurement(${measurement.id})" class="btn-small btn-edit">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </button>
+                                                <button onclick="deleteMeasurement(${measurement.id})" class="btn-small btn-delete">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
                                             </div>
                                         </div>
                                     `).join('')}
@@ -709,9 +855,13 @@
                 fetch('/api/customers')
                     .then(res => res.json())
                     .then(customers => {
+                        allCustomers = customers; // Store for search
                         displayCustomers(customers);
                     })
-                    .catch(err => console.error('Error loading customers:', err));
+                    .catch(err => {
+                        console.error('Error loading customers:', err);
+                        alert('❌ Error loading customers: ' + err.message);
+                    });
             }
 
             // Load customers on page load
