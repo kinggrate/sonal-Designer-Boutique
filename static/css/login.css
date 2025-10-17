@@ -739,64 +739,7 @@ select.form-control {
 
 /* END PERPLEXITY DESIGN SYSTEM */
 ```css
-/* 🏆 SONAL DESIGNER BOUTIQUE - LOGIN PAGE - DESIGN SYSTEM THEME 🏆 */
-
-:root {
-  /* DESIGN SYSTEM COLOR MAPPINGS */
-  --color-black: var(--color-charcoal-800);
-  --color-gold: var(--color-primary);
-  --color-gold-light: var(--color-teal-300);
-  --color-gold-dark: var(--color-primary-hover);
-  --color-dark-gold: var(--color-teal-700);
-  --color-warm-black: var(--color-charcoal-700);
-  --color-soft-black: var(--color-slate-900);
-  --color-charcoal: var(--color-slate-500);
-  --color-gold-muted: var(--color-teal-600);
-  
-  /* Typography - Updated to Design System */
-  --font-family-base: var(--font-family-base);
-  --font-family-accent: var(--font-family-base);
-  --font-size-xs: var(--font-size-xs);
-  --font-size-sm: var(--font-size-sm);
-  --font-size-base: var(--font-size-base);
-  --font-size-md: var(--font-size-lg);
-  --font-size-lg: var(--font-size-xl);
-  --font-size-xl: var(--font-size-2xl);
-  --font-size-2xl: var(--font-size-3xl);
-  --font-size-3xl: var(--font-size-4xl);
-  --font-size-4xl: 36px;
-  --font-weight-normal: var(--font-weight-normal);
-  --font-weight-medium: var(--font-weight-medium);
-  --font-weight-semibold: var(--font-weight-semibold);
-  --font-weight-bold: var(--font-weight-bold);
-
-  /* Spacing - Use Design System */
-  --space-4: var(--space-4);
-  --space-8: var(--space-8);
-  --space-12: var(--space-12);
-  --space-16: var(--space-16);
-  --space-20: var(--space-20);
-  --space-24: var(--space-24);
-  --space-32: var(--space-32);
-  --space-40: 40px;
-
-  /* Border Radius - Use Design System */
-  --radius-sm: var(--radius-sm);
-  --radius-base: var(--radius-base);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
-  --radius-full: var(--radius-full);
-
-  /* Shadows & Effects - Adapted to Design System Colors */
-  --gold-glow: 0 0 30px rgba(var(--color-teal-500-rgb), 0.6);
-  --gold-shadow: var(--shadow-lg);
-  --black-shadow: 0 8px 25px rgba(var(--color-slate-900-rgb), 0.8);
-  
-  /* Animation - Use Design System */
-  --duration-fast: var(--duration-fast);
-  --duration-normal: var(--duration-normal);
-  --ease-standard: var(--ease-standard);
-}
+/* 🏆 SONAL DESIGNER BOUTIQUE - DESIGN SYSTEM COMPLIANT THEME 🏆 */
 
 /* Base Styles */
 * {
@@ -807,7 +750,7 @@ select.form-control {
 
 body {
     font-family: var(--font-family-base);
-    background: linear-gradient(135deg, var(--color-background) 0%, var(--color-charcoal-700) 50%, var(--color-slate-900) 100%);
+    background: linear-gradient(135deg, var(--color-background) 0%, var(--color-charcoal-700) 50%, var(--color-charcoal-800) 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -818,7 +761,7 @@ body {
     color: var(--color-text);
 }
 
-/* GOLDEN SPARKLE BACKGROUND ANIMATION */
+/* TEAL SPARKLE BACKGROUND ANIMATION */
 body::before {
     content: '';
     position: absolute;
@@ -867,7 +810,7 @@ body::before {
     background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-charcoal-800) 100%);
     border: 3px solid var(--color-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(var(--color-teal-500-rgb), 0.2);
+    box-shadow: var(--shadow-lg), 0 8px 25px rgba(var(--color-teal-500-rgb), 0.4);
     backdrop-filter: blur(20px);
     overflow: hidden;
     position: relative;
@@ -882,7 +825,7 @@ body::before {
         var(--color-primary), 
         var(--color-teal-300), 
         var(--color-primary), 
-        var(--color-teal-700), 
+        var(--color-primary-hover), 
         var(--color-primary)
     );
     border-radius: inherit;
@@ -941,6 +884,9 @@ body::before {
     margin-bottom: var(--space-20);
     transition: all var(--duration-normal) var(--ease-standard);
     box-shadow: 0 0 30px rgba(var(--color-teal-500-rgb), 0.6);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .login-logo:hover {
@@ -954,7 +900,7 @@ body::before {
     font-weight: var(--font-weight-bold);
     margin-bottom: var(--space-16);
     color: var(--color-primary);
-    text-shadow: 2px 2px 8px rgba(var(--color-slate-900-rgb), 0.8);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
     letter-spacing: 2px;
 }
 
@@ -962,7 +908,7 @@ body::before {
     font-size: var(--font-size-lg);
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-medium);
-    text-shadow: 1px 1px 4px rgba(var(--color-slate-900-rgb), 0.8);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
     font-style: italic;
 }
 
@@ -990,7 +936,7 @@ body::before {
 }
 
 .error-message {
-    background: linear-gradient(135deg, var(--color-error) 0%, #c82333 100%);
+    background: linear-gradient(135deg, var(--color-error) 0%, var(--color-red-400) 100%);
     color: var(--color-white);
     padding: var(--space-16) var(--space-20);
     border-radius: var(--radius-md);
@@ -1050,14 +996,14 @@ body::before {
     background: var(--color-surface);
     color: var(--color-text);
     font-family: var(--font-family-base);
-    box-shadow: inset 0 2px 4px rgba(var(--color-slate-900-rgb), 0.3);
+    box-shadow: var(--shadow-inset-sm);
 }
 
 .form-group input:focus {
     outline: none;
     border-color: var(--color-primary);
     background: var(--color-surface);
-    box-shadow: var(--focus-ring), inset 0 2px 4px rgba(var(--color-slate-900-rgb), 0.3);
+    box-shadow: var(--focus-ring), var(--shadow-inset-sm);
     transform: translateY(-2px);
 }
 
@@ -1083,7 +1029,7 @@ body::before {
     gap: var(--space-12);
     margin-top: var(--space-20);
     font-family: var(--font-family-base);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 25px rgba(var(--color-teal-500-rgb), 0.4);
     text-transform: uppercase;
     letter-spacing: 1px;
     position: relative;
@@ -1111,17 +1057,21 @@ body::before {
 
 .login-btn:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-lg), 0 12px 30px rgba(var(--color-teal-500-rgb), 0.5);
+    box-shadow: 0 0 30px rgba(var(--color-teal-500-rgb), 0.6), 0 12px 30px rgba(var(--color-teal-500-rgb), 0.5);
     background: linear-gradient(135deg, var(--color-teal-300) 0%, var(--color-primary) 100%);
 }
 
 .login-btn:active {
     transform: translateY(-2px);
-    background: linear-gradient(135deg, var(--color-primary-active) 0%, var(--color-teal-700) 100%);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary-active) 100%);
 }
 
 .login-btn:focus {
     outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.login-btn:focus-visible {
     box-shadow: var(--focus-ring);
 }
 
@@ -1281,7 +1231,7 @@ body::before {
 
 /* ACCESSIBILITY IMPROVEMENTS */
 .login-btn:focus-visible {
-    outline: 3px solid rgba(var(--color-teal-500-rgb), 0.6);
+    outline: 3px solid var(--color-focus-ring);
     outline-offset: 2px;
 }
 
@@ -1292,13 +1242,6 @@ body::before {
 
 /* HIGH CONTRAST MODE SUPPORT */
 @media (prefers-contrast: high) {
-    :root {
-        --color-gold: var(--color-teal-300);
-        --color-gold-muted: var(--color-teal-600);
-        --color-black: var(--color-slate-900);
-        --color-warm-black: var(--color-slate-900);
-    }
-    
     .login-card {
         border-width: 4px;
     }
