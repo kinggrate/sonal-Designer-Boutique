@@ -738,7 +738,7 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-```css
+
 /* BOUTIQUE MANAGEMENT SYSTEM - UPDATED TO MATCH DESIGN SYSTEM */
 
 :root {
@@ -1780,4 +1780,3 @@ body::before {
   background: var(--color-secondary-hover);
   border-color: var(--color-primary);
 }
-```
