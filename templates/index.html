@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sonal Designer Boutique - Orders Management</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_fixed.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Header with Logo - FIXED -->
+        <!-- Header with Logo - PERFECT BLACK & GOLD -->
         <header class="header">
             <div class="logo-container">
                 <img src="{{ url_for('static', filename='images/WhatsApp-Image-2025-07-06-at-18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="logo">
@@ -242,6 +242,12 @@
                 <!-- Customers will be loaded here -->
             </div>
         </section>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
     </div>
 
     <script>
@@ -289,7 +295,7 @@
             let editingCustomerId = null;
             let allCustomers = []; // Store all customers for search
 
-            // MEASUREMENT FIELD TEMPLATES WITH DETAILED VIEW
+            // MEASUREMENT FIELD TEMPLATES WITH DETAILED VIEW - ALL FIELDS DISPLAYED
             const garmentFields = {
                 blouse: `
                     <div class="garment-fields">
@@ -1093,15 +1099,19 @@
 
             // Load customers function
             function loadCustomers() {
+                document.getElementById('loadingSpinner').style.display = 'block';
+                
                 fetch('/api/customers')
                     .then(res => res.json())
                     .then(customers => {
                         allCustomers = customers; // Store for search
                         displayCustomers(customers);
+                        document.getElementById('loadingSpinner').style.display = 'none';
                     })
                     .catch(err => {
                         console.error('Error loading customers:', err);
                         alert('❌ Error loading customers: ' + err.message);
+                        document.getElementById('loadingSpinner').style.display = 'none';
                     });
             }
 
