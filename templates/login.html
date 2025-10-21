@@ -7,55 +7,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* ENSURE BLACK & GOLD THEME */
-        body {
-            background: #000000 !important;
-            color: #FFD700 !important;
-        }
-        .login-logo {
-            display: block !important;
-            width: 160px !important;
-            height: 160px !important;
-            border: 4px solid #FFD700 !important;
-            border-radius: 16px !important;
-            margin: 0 auto 20px auto !important;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8) !important;
-        }
-        /* Fallback logo styling if image fails */
-        .logo-fallback {
-            width: 160px !important;
-            height: 160px !important;
-            background: linear-gradient(135deg, #FFD700, #B8860B) !important;
-            border: 4px solid #FFD700 !important;
-            border-radius: 16px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            margin: 0 auto 20px auto !important;
-            font-size: 24px !important;
-            font-weight: bold !important;
-            color: #000000 !important;
-            text-align: center !important;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8) !important;
-        }
-    </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-card">
             <div class="logo-section">
-                <!-- Try to load logo, if fails show fallback -->
-                <img src="{{ url_for('static', filename='images/WhatsApp-Image-2025-07-06-at-18.34.54_726adc49.jpg') }}" 
-                     alt="Sonal Designer Boutique" 
-                     class="login-logo" 
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="logo-fallback" style="display: none;">
-                    <div>
-                        <div style="font-size: 28px; margin-bottom: 8px;">✨ S ✨</div>
-                        <div style="font-size: 14px;">BOUTIQUE</div>
-                    </div>
-                </div>
+                <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-07-06 at 18.34.54_726adc49.jpg') }}" alt="Sonal Designer Boutique" class="login-logo">
                 <h1 class="login-title">Sonal Designer Boutique</h1>
                 <p class="login-subtitle">Fashion Designing Training Institute</p>
             </div>
@@ -77,7 +34,7 @@
                             <i class="fas fa-user"></i>
                             Username
                         </label>
-                        <input type="text" id="username" name="username" required placeholder="Enter your username" autocomplete="username">
+                        <input type="text" id="username" name="username" required placeholder="Enter your username">
                     </div>
                     
                     <div class="form-group">
@@ -85,51 +42,20 @@
                             <i class="fas fa-lock"></i>
                             Password
                         </label>
-                        <input type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
                     </div>
                     
                     <button type="submit" class="login-btn">
                         <i class="fas fa-sign-in-alt"></i>
-                        <span>Sign In</span>
+                        Sign In
                     </button>
                 </form>
             </div>
             
             <div class="login-footer">
-                <p>© 2025 Sonal Designer Boutique. All rights reserved.</p>
+                <p>&copy; 2025 Sonal Designer Boutique. All rights reserved.</p>
             </div>
         </div>
     </div>
-
-    <script>
-        // Add loading state to login button
-        document.querySelector('.login-form').addEventListener('submit', function() {
-            const btn = document.querySelector('.login-btn');
-            btn.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Signing In...</span>';
-        });
-
-        // Focus management for better UX
-        document.addEventListener('DOMContentLoaded', function() {
-            const usernameInput = document.getElementById('username');
-            if (usernameInput) {
-                usernameInput.focus();
-            }
-        });
-
-        // Enter key handling
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const form = document.querySelector('.login-form');
-                if (form) {
-                    form.submit();
-                }
-            }
-        });
-        
-        // Ensure black background
-        document.body.style.background = '#000000';
-        document.body.style.color = '#FFD700';
-    </script>
 </body>
 </html>
